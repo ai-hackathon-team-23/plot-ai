@@ -1,18 +1,22 @@
 import React from "react";
-import { db } from "~/server/db";
 import { getServerAuthSession } from "~/server/auth";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 type Props = {};
 
 const Models = async (props: Props) => {
   const session = await getServerAuthSession();
   const prisma = new PrismaClient();
-
-  // Select all models with userId
-  // Format models into list of buttons
 
   const models: unknown = await prisma.models.findMany({
     where: {
@@ -23,18 +27,27 @@ const Models = async (props: Props) => {
   });
 
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="rounded-lg border-2 border-black p-4">
-        <div className="flex flex-col items-center">
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="flex w-full max-w-screen-lg flex-col">
+        <div className="mb-4 flex w-full justify-between">
+          <Button>Placeholder</Button>
+          <Button>Create +</Button>
+        </div>
+        <div className="grid grid-cols-3 gap-10">
           {models.map((model) => (
-            <div className="p-2">
-              <Button asChild>
-                <Link href={"/models/editor/" + model["id"]}>
-                  {" "}
-                  {model["name"]}{" "}
-                </Link>
-              </Button>
-            </div>
+            <Card key={model["id"]} className="w-[325px]">
+              <CardHeader>
+                <CardTitle>{model["name"]}</CardTitle>
+                <CardDescription>Test Description.</CardDescription>
+              </CardHeader>
+              <CardContent></CardContent>
+              <CardFooter className="flex justify-between">
+                <CardDescription className="text-xs">Updated: {model["updatedAt"].toLocaleDateString() + ' ' + model["updatedAt"].toLocaleTimeString() }</CardDescription>
+                <Button asChild>
+                  <Link href={"/models/editor/" + model["id"]}>Open</Link>
+                </Button>
+              </CardFooter>
+            </Card>
           ))}
         </div>
       </div>
