@@ -73,19 +73,34 @@ model Models {
     updatedAt DateTime @updatedAt
 }
 
+enum Formats {
+    USD
+    NUMBER
+    PERCENT
+}
+
+enum Categories {
+    MATH
+    RENTAL_INCOME
+    OPERATING_EXPENSES
+    NET_INCOME
+    DEBT_SERVICE
+    CASH_FLOW
+    TAX_CONSIDERATIONS
+    RETURN_METRICS
+    PROPERTY_VALUATION
+}
+
 model ModelParameters {
-    id                       String                 @id @default(cuid())
+    id                       String     @id @default(cuid())
     name                     String
     operator                 String?
     data                     Json?
-    category                 ModelParameterCategory @relation(fields: [modelParameterCategoryId], references: [id])
+    endpoint                 String?
+    format                   Formats
+    functionality            Json?
+    category                 Categories
     modelParameterCategoryId String
-}
-
-model ModelParameterCategory {
-    id              String            @id @default(cuid())
-    name            String
-    ModelParameters ModelParameters[]
 }
 
 model VerificationToken {
