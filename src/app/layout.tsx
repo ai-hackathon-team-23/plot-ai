@@ -29,7 +29,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable} w-screen`}>
         <TRPCReactProvider>
-          <NavBar session={session}/>
+          <NavBar session={session!}/>
           {children}
         </TRPCReactProvider>
       </body>
