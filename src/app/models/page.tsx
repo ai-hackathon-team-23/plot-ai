@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { SearchBar } from "./_components/search-bar";
 
 type Props = {};
 
@@ -30,6 +31,7 @@ const Models = async (props: Props) => {
     <div className="flex min-h-screen items-center justify-center">
       <div className="flex w-full max-w-screen-lg flex-col">
         <div className="mb-4 flex w-full justify-between">
+          <SearchBar/>
           <Button>Placeholder</Button>
           <Button>Create +</Button>
         </div>
