@@ -58,7 +58,7 @@ import { MyButton, ParameterCell } from './parameter-cell'
 export function ParameterList () {
  return (
 
-    <div className="flex-none w-1/4 h-full bg-white-200 overflow-y-auto shadow-lg">
+    <div className="flex-none bg-white-200 overflow-y-auto shadow-lg">
        {PARAMETER_LIST_DATA.map( section => (
          <Collapsible defaultOpen={true} key={section.section}>
            <CollapsibleTrigger className="w-full bg-gray-300 font-bold py-2 px-4 rounded text-left">
