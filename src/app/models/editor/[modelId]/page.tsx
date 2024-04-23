@@ -1,6 +1,6 @@
 import React from 'react'
 import { ParameterList } from '../../_components/parameter-list';
-
+import { Canvas } from '../../_components/canvas';
 type Props = {
   params: { modelId: string }
 }
@@ -11,9 +11,7 @@ const ModelCreatorView = ({ params }: Props) => {
   return (
     <div className="flex h-full">
       <ParameterList/>
-      <div className="flex-grow">
-        {modelId}
-      </div>
+      <Canvas />
     </div>
   )
 }
