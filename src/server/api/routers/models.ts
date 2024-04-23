@@ -23,6 +23,14 @@ export const modelsRouter = createTRPCRouter({
       return model;
     }),
 
+  getAll: protectedProcedure
+    .input(z.object({ user_id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.models.findMany({
+        where: { userId: input.user_id || ctx.session.user.id },
+      });
+    }),
+
   create: protectedProcedure
     .input(z.object({ user_id: z.string(), model_name: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {

@@ -1,6 +1,8 @@
 import React from "react";
 import { getServerAuthSession } from "~/server/auth";
 import { PrismaClient } from "@prisma/client";
+import { db } from "~/server/db";
+import { api } from "~/trpc/server";
 import { Button } from "@/components/ui/button";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
@@ -18,7 +20,8 @@ const Models = async () => {
   const session = await getServerAuthSession();
   const prisma = new PrismaClient();
 
-  const models = await prisma.models.findMany({
+
+  const models = await db.models.findMany({
     where: {
       userId: {
         equals: session?.user.id,
