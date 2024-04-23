@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EditBar } from "./_components/edit-bar-container";
 
 type Props = {};
 
@@ -29,6 +30,7 @@ const Models = async (props: Props) => {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div className="flex w-full max-w-screen-lg flex-col">
+      <div className="pb-10"><EditBar></EditBar></div>
         <div className="mb-4 flex w-full justify-between">
           <Button>Placeholder</Button>
           <Button>Create +</Button>
