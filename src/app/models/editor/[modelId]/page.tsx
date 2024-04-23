@@ -1,58 +1,110 @@
 "use client";
-import { useState, useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import ReactFlow, {
   Controls,
   Background,
-  applyNodeChanges,
-  applyEdgeChanges,
+  addEdge,
+  useReactFlow,
+  ReactFlowProvider,
+  useEdgesState,
+  useNodesState,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 const initialNodes = [
   {
-    id: '1',
+    id: '0',
     data: { label: 'Hello' },
     position: { x: 0, y: 0 },
     type: 'input',
   },
-  {
-    id: '2',
-    data: { label: 'World' },
-    position: { x: 100, y: 100 },
+];
+
+let id = 1;
+const getId = () => `${id++}`;
+
+const Flow = () => {
+  const ReactFlowWrapper = useRef(null);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const connectingNodeId = useRef(null);
+  const { screenToFlowPosition } = useReactFlow();
+
+  // const onNodesChange = useCallback(
+  //   (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+  //   [],
+  // );
+  // const onEdgesChange = useCallback(
+  //   (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+  //   [],
+  // );
+
+  const onConnect = useCallback(
+    (params) => {
+      connectingNodeId.current = null;
+      setEdges((eds) => addEdge(params, eds))
+    },
+    []
+  );
+
+  const onConnectStart = useCallback((_, {nodeId}) => {
+    connectingNodeId.current = nodeId;
   },
-];
+  []);
 
-const initialEdges = [
-  { id: '1-2', source: '1', target: '2', label: 'to the', type: 'step' },
-];
+  const onConnectEnd = useCallback(
+    (event) => {
+      if (!connectingNodeId.current) return;
 
-function Flow() {
-  const [nodes, setNodes] = useState(initialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+      const targetIsPane = event.target.classList.contains('react-flow__pane');
 
-  const onNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
-    [],
+      if (targetIsPane) {
+        console.log('Creating new node')
+        const id = getId();
+        const newNode = {
+          id,
+          position: screenToFlowPosition({
+            x: event.clientX,
+            y: event.clientY,
+          }),
+          data: { label: nodes.at(connectingNodeId - 1)?.data.label },
+          origin: [0.5, 0.0],
+        };
+
+        setNodes((nds) => nds.concat(newNode));
+        setEdges((eds) => 
+          eds.concat({ id, source: connectingNodeId.current, target: id}),
+          );
+        
+      }
+    },
+    [screenToFlowPosition]
   );
-  const onEdgesChange = useCallback(
-    (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
-    [],
-  );
+
 
   return (
-    <div style={{ height: 800 }}>
-      <ReactFlow
-        nodes={nodes}
-        onNodesChange={onNodesChange}
-        edges={edges}
-        onEdgesChange={onEdgesChange}
-        fitView
-      >
-        <Background />
-        <Controls />
-      </ReactFlow>
+    <div style={{ height: 800 }} ref={ReactFlowWrapper}>
+       <ReactFlow
+          nodes={nodes}
+          onNodesChange={onNodesChange}
+          edges={edges}
+          onEdgesChange={onEdgesChange}
+          onConnectStart={onConnectStart}
+          onConnect={onConnect}
+          onConnectEnd={onConnectEnd}
+          fitView
+        >
+          <Background />
+          <Controls />
+        </ReactFlow>
     </div>
   );
 }
 
-export default Flow;
+export default () => (
+  <ReactFlowProvider>
+    <Flow>
+
+    </Flow>
+  </ReactFlowProvider>
+);
