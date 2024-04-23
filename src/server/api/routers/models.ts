@@ -8,12 +8,12 @@ import {
 
 export const modelsRouter = createTRPCRouter({
   get: protectedProcedure
-    .input(z.object({ user_id: z.string(), model_id: z.string() }))
+    .input(z.object({ userId: z.string(), modelId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { user_id, model_id } = input;
+      const { userId, modelId } = input;
 
       const model = await ctx.db.models.findFirst({
-        where: { id: model_id, userId: user_id || ctx.session.user.id },
+        where: { id: modelId, userId: userId || ctx.session.user.id },
       });
 
       if (!model) {
@@ -24,38 +24,45 @@ export const modelsRouter = createTRPCRouter({
     }),
 
   create: protectedProcedure
-    .input(z.object({ user_id: z.string(), model_name: z.string().min(1) }))
+    .input(
+      z.object({
+        userId: z.string(),
+        modelName: z.string().min(1),
+        modelDescription: z.string(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
-      const { user_id, model_name } = input;
+      const { userId, modelName, modelDescription } = input;
 
       return ctx.db.models.create({
         data: {
-          name: model_name,
-          userId: user_id || ctx.session.user.id,
+          name: modelName,
+          description: modelDescription,
+          userId: userId || ctx.session.user.id,
         },
       });
     }),
 
   update: protectedProcedure
-    .input(z.object({ model_id: z.string(), model_object: z.object({}) }))
+    .input(z.object({ modelId: z.string(), modelObject: z.object({}) }))
     .mutation(async ({ ctx, input }) => {
-      const { model_id, model_object } = input;
+      const { modelId, modelObject } = input;
 
       const updatedModel = await ctx.db.models.update({
-        where: { id: model_id },
-        data: model_object,
+        where: { id: modelId },
+        data: modelObject,
       });
 
       return updatedModel;
     }),
 
   delete: protectedProcedure
-    .input(z.object({ model_id: z.string() }))
+    .input(z.object({ modelId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const { model_id } = input;
+      const { modelId } = input;
 
       await ctx.db.models.delete({
-        where: { id: model_id },
+        where: { id: modelId },
       });
 
       return { success: true };

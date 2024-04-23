@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { EditBar } from "./_components/edit-bar-container";
 
+import { SearchBar } from "./_components/search-bar";
 type Props = {};
 
 const Models = async (props: Props) => {
@@ -32,6 +33,7 @@ const Models = async (props: Props) => {
       <div className="flex w-full max-w-screen-lg flex-col">
       <div className="pb-10"><EditBar></EditBar></div>
         <div className="mb-4 flex w-full justify-between">
+          <SearchBar/>
           <Button>Placeholder</Button>
           <Button>Create +</Button>
         </div>
