@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { TRPCReactProvider } from "~/trpc/react";
 import NavBar from "@/app/_components/nav-bar";
 import { getServerAuthSession } from "~/server/auth";
+import { Toaster } from "@/components/ui/sonner"
 
 
 const inter = Inter({
@@ -31,6 +32,8 @@ export default async function RootLayout({
         <TRPCReactProvider>
           <NavBar session={session!}/>
           {children}
+          <Toaster />
+
         </TRPCReactProvider>
       </body>
     </html>

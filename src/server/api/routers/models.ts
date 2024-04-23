@@ -32,14 +32,21 @@ export const modelsRouter = createTRPCRouter({
     }),
 
   create: protectedProcedure
-    .input(z.object({ user_id: z.string(), model_name: z.string().min(1) }))
+    .input(
+      z.object({
+        userId: z.string(),
+        modelName: z.string().min(1),
+        description: z.string().max(150),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
-      const { user_id, model_name } = input;
+      const { userId, modelName, description } = input;
 
       return ctx.db.models.create({
         data: {
-          name: model_name,
-          userId: user_id || ctx.session.user.id,
+          name: modelName,
+          userId: userId || ctx.session.user.id,
+          description: description,
         },
       });
     }),
