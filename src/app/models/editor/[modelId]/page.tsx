@@ -1,4 +1,6 @@
-import React from "react";
+import React from 'react'
+import { ParameterList } from '../../_components/parameter-list';
+import { Canvas } from '../../_components/canvas';
 import { EditBar } from "../../_components/edit-bar-container";
 
 type Props = {
@@ -9,10 +11,12 @@ const ModelCreatorView = ({ params }: Props) => {
   const { modelId } = params;
 
   return (
-    <div>
-      <div className="pb-10">
-        <EditBar />
-      </div>
+    <div className="flex h-full">
+      <ParameterList/>
+      <Canvas />
+    </div>
+  )
+}
 
       {modelId}
     </div>
