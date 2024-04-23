@@ -14,9 +14,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { EditBar } from "./_components/edit-bar-container";
 import CreateModelForm from "./_components/create-model-form";
 
-const Models = async () => {
+import { SearchBar } from "./_components/search-bar";
+type Props = {};
+
+const Models = async (props: Props) => {
   const session = await getServerAuthSession();
   const models = await api.models.getAll({ user_id: session?.user.id ?? "" });
   return (
@@ -25,7 +29,9 @@ const Models = async () => {
         Models
       </h2>
       <div className="flex w-full flex-col">
+      <div className="pb-10"><EditBar></EditBar></div>
         <div className="mb-4 flex w-full justify-between">
+          <SearchBar/>
           <Button>Placeholder</Button>
           <CreateModelForm userId={session?.user.id}/>
         </div>
