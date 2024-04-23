@@ -1,15 +1,22 @@
-import React from 'react'
+import React from "react";
+import { EditBar } from "../../_components/edit-bar-container";
 
 type Props = {
-  params: { modelId: string }
-}
+  params: { modelId: string };
+};
 
 const ModelCreatorView = ({ params }: Props) => {
   const { modelId } = params;
 
   return (
-    <div>{modelId}</div>
-  )
-}
+    <div>
+      <div className="pb-10">
+        <EditBar />
+      </div>
 
-export default ModelCreatorView
+      {modelId}
+    </div>
+  );
+};
+
+export default ModelCreatorView;

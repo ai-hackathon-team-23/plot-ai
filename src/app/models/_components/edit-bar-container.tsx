@@ -12,7 +12,7 @@ export function EditBar() {
 
   return (
     <>
-      <div className="grid grid-cols-10 rounded-md outline outline-1">
+      <div className="grid grid-cols-10  border-y ">
         <div className="col-span-8">
           {/* {Block Title Here} */}
           <span className="inline-block pl-4 align-middle font-bold">
@@ -25,11 +25,12 @@ export function EditBar() {
               size={"w-[200px]"}
               placeholder={"Edit"}
               items={EDIT_OPTIONS}
+              className="border-0 border-l shadow-none rounded-none"
             />
           </span>
         </div>
       </div>
-      <div className="grid grid-cols-10 rounded-md outline outline-1">
+      <div className="grid grid-cols-10  border-b ">
         <div className="col-span-2 border-r-2">
           {/* {Cell Title Here} */}
           <span className="inline-block pl-4 align-middle font-bold">
@@ -46,13 +47,14 @@ export function EditBar() {
               size={"w-[160px]"}
               placeholder={"Format"}
               items={ITEMS_DATA_TEST}
+              className="border-0 border-x shadow-none rounded-none"
             />
           </span>
           <span className="pl-3 pr-2 pt-2">
             <Checkbox
               checked={checked}
               onCheckedChange={() => setChecked(!checked)}
-              className={'border border-dashed'}
+              className={"border border-dashed"}
             />
           </span>
         </div>
