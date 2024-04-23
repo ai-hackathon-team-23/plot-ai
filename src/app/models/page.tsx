@@ -29,10 +29,8 @@ const Models = async (props: Props) => {
         Models
       </h2>
       <div className="flex w-full flex-col">
-      <div className="pb-10"><EditBar></EditBar></div>
         <div className="mb-4 flex w-full justify-between">
           <SearchBar/>
-          <Button>Placeholder</Button>
           <CreateModelForm userId={session?.user.id}/>
         </div>
         <div className="grid grid-cols-3 ">

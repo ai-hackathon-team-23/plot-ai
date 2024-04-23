@@ -1,9 +1,11 @@
 import React from 'react'
 import { ParameterList } from '../../_components/parameter-list';
 import { Canvas } from '../../_components/canvas';
+import { EditBar } from "../../_components/edit-bar-container";
+
 type Props = {
-  params: { modelId: string }
-}
+  params: { modelId: string };
+};
 
 const ModelCreatorView = ({ params }: Props) => {
   const { modelId } = params;
@@ -16,4 +18,9 @@ const ModelCreatorView = ({ params }: Props) => {
   )
 }
 
-export default ModelCreatorView
+      {modelId}
+    </div>
+  );
+};
+
+export default ModelCreatorView;
