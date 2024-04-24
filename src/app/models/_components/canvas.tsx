@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import ReactFlow, {
   Controls,
   Background,
@@ -8,17 +8,23 @@ import ReactFlow, {
   ReactFlowProvider,
   useEdgesState,
   useNodesState,
+  Node,
+  NodeTypes,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
+import BlockComponent from './block-react-flow';
+import { useListData } from '@adobe/react-spectrum';
 
 const initialNodes = [
   {
     id: '0',
     data: { label: 'Hello' },
     position: { x: 0, y: 0 },
-    type: 'input',
+    type: "blockComp",
   },
 ];
+
+
 
 let id = 1;
 const getId = () => `${id++}`;
@@ -29,6 +35,7 @@ const Flow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const connectingNodeId = useRef(null);
   const { screenToFlowPosition } = useReactFlow();
+  const nodeTypes: NodeTypes = useMemo(() => ({ blockComp: BlockComponent }), []);
 
   // const onNodesChange = useCallback(
   //   (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -93,6 +100,7 @@ const Flow = () => {
           onConnect={onConnect}
           onConnectEnd={onConnectEnd}
           fitView
+          nodeTypes={nodeTypes}
         >
           <Background />
           <Controls />
