@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useRef } from 'react';
+import { useCallback, useMemo, useRef } from "react";
 import ReactFlow, {
   Controls,
   Background,
@@ -8,15 +8,22 @@ import ReactFlow, {
   ReactFlowProvider,
   useEdgesState,
   useNodesState,
-} from 'reactflow';
-import 'reactflow/dist/style.css';
+  type Node,
+  type NodeTypes 
+} from "reactflow";
+import BlockComponent from "./block-react-flow";
+import "reactflow/dist/style.css";
 
-const initialNodes = [
+const Component = () => {
+  return <div>sdfsdf</div>;
+};
+
+const initialNodes: Node[] = [
   {
-    id: '0',
-    data: { label: 'Hello' },
+    id: "0",
+    data: "text",
     position: { x: 0, y: 0 },
-    type: 'input',
+    type: "blockComp",
   },
 ];
 
@@ -29,6 +36,7 @@ const Flow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const connectingNodeId = useRef(null);
   const { screenToFlowPosition } = useReactFlow();
+  const nodeTypes: NodeTypes = useMemo(() => ({ blockComp: BlockComponent }), []);
 
   // const onNodesChange = useCallback(
   //   (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -39,27 +47,23 @@ const Flow = () => {
   //   [],
   // );
 
-  const onConnect = useCallback(
-    (params) => {
-      connectingNodeId.current = null;
-      setEdges((eds) => addEdge(params, eds))
-    },
-    []
-  );
+  const onConnect = useCallback((params) => {
+    connectingNodeId.current = null;
+    setEdges((eds) => addEdge(params, eds));
+  }, []);
 
-  const onConnectStart = useCallback((_, {nodeId}) => {
+  const onConnectStart = useCallback((_, { nodeId }) => {
     connectingNodeId.current = nodeId;
-  },
-  []);
+  }, []);
 
   const onConnectEnd = useCallback(
     (event) => {
       if (!connectingNodeId.current) return;
 
-      const targetIsPane = event.target.classList.contains('react-flow__pane');
+      const targetIsPane = event.target.classList.contains("react-flow__pane");
 
       if (targetIsPane) {
-        console.log('Creating new node')
+        console.log("Creating new node");
         const id = getId();
         const newNode = {
           id,
@@ -72,39 +76,36 @@ const Flow = () => {
         };
 
         setNodes((nds) => nds.concat(newNode));
-        setEdges((eds) => 
-          eds.concat({ id, source: connectingNodeId.current, target: id}),
-          );
-        
+        setEdges((eds) =>
+          eds.concat({ id, source: connectingNodeId.current, target: id }),
+        );
       }
     },
-    [screenToFlowPosition]
+    [screenToFlowPosition],
   );
-
 
   return (
     <div style={{ height: 800 }} ref={ReactFlowWrapper}>
-       <ReactFlow
-          nodes={nodes}
-          onNodesChange={onNodesChange}
-          edges={edges}
-          onEdgesChange={onEdgesChange}
-          onConnectStart={onConnectStart}
-          onConnect={onConnect}
-          onConnectEnd={onConnectEnd}
-          fitView
-        >
-          <Background />
-          <Controls />
-        </ReactFlow>
+      <ReactFlow
+        nodes={nodes}
+        onNodesChange={onNodesChange}
+        edges={edges}
+        onEdgesChange={onEdgesChange}
+        onConnectStart={onConnectStart}
+        onConnect={onConnect}
+        onConnectEnd={onConnectEnd}
+        fitView
+        nodeTypes={nodeTypes}
+      >
+        <Background />
+        <Controls />
+      </ReactFlow>
     </div>
   );
-}
+};
 
 export const Canvas = () => (
   <ReactFlowProvider>
-    <Flow>
-
-    </Flow>
+    <Flow></Flow>
   </ReactFlowProvider>
 );
