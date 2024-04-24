@@ -11,25 +11,27 @@ import {
 
 import { PARAMETER_LIST_DATA } from "../_constants/constants";
 import { ParameterCell } from "./parameter-cell";
+import { DragHandleDots2Icon } from "@radix-ui/react-icons";
 
 export function ParameterListSearch() {
   return (
-    <Command className="rounded-lg border shadow-md">
+    <Command className="rounded-none border shadow-md">
       <CommandInput placeholder="Type a parameter to search..." />
-      <CommandList className="max-h-[800px] ">
+      <CommandList className="max-h-[840px] ">
         <CommandEmpty>No results found.</CommandEmpty>
         {PARAMETER_LIST_DATA.map((section) => (
           <>
             <CommandGroup heading={section.section}>
               <CommandSeparator />
               {section.parameters.map((param) => (
-                <div key={param.value} className="w-full hover:bg-gray-100">
+                <div key={param.value} className="w-64 hover:bg-gray-100">
                   <CommandItem>
                     <ParameterCell
                       value={param.value}
                       label={param.label}
                       format={param.format}
                     />
+                    <CommandShortcut><DragHandleDots2Icon/></CommandShortcut>
                   </CommandItem>
                 </div>
               ))}
