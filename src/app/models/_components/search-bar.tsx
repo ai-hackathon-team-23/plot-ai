@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { CheckIcon, CaretSortIcon } from "@radix-ui/react-icons"
+import * as React from "react";
+import { CheckIcon, CaretSortIcon } from "@radix-ui/react-icons";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -12,12 +12,13 @@ import {
   CommandList,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
+import { PARAMETER_LIST_DATA } from "../_constants/constants";
 
 const parameters = [
   {
@@ -40,10 +41,12 @@ const parameters = [
     value: "parameter5",
     label: "Parameter 5",
   },
-]
+];
+
 export function SearchBar() {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
+  const [label, setLabel] = React.useState("");
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,9 +56,7 @@ export function SearchBar() {
           aria-expanded={open}
           className="w-[300px] justify-between bg-white text-black hover:bg-gray-200"
         >
-          {value
-            ? parameters.find((parameter) => parameter.value === value)?.label
-            : "Select parameters..."}
+          {value ? label : "Select parameters..."}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -65,28 +66,31 @@ export function SearchBar() {
           <CommandList>
             <CommandEmpty>No parameter found.</CommandEmpty>
             <CommandGroup>
-                    {parameters.map((parameter) => (
-                    <CommandItem
-                        key={parameter.value}
-                        value={parameter.value}
-                        onSelect={(currentValue) => {
-                        setValue(currentValue === value ? "" : currentValue)
-                        setOpen(false)
-                        }}
-                    >
-                        <CheckIcon
-                        className={cn(
-                            "mr-2 h-4 w-4",
-                            value === parameter.value ? "opacity-100" : "opacity-0"
-                        )}
-                        />
-                        {parameter.label}
-                    </CommandItem>
-                    ))}
+              {PARAMETER_LIST_DATA.map((section) =>
+                section.parameters.map((parameter) => (
+                  <CommandItem
+                    key={parameter.value}
+                    value={parameter.value}
+                    onSelect={(currentValue) => {
+                      setValue(currentValue === value ? "" : currentValue);
+                      setLabel(parameter.label);
+                      setOpen(false);
+                    }}
+                  >
+                    <CheckIcon
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === parameter.value ? "opacity-100" : "opacity-0",
+                      )}
+                    />
+                    {parameter.label}
+                  </CommandItem>
+                )),
+              )}
             </CommandGroup>
           </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
-  )
+  );
 }
