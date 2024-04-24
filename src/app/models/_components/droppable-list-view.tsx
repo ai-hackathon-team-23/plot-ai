@@ -29,11 +29,23 @@ export default function DroppableListView(props: DndListViewProps) {
   const { dragAndDropHooks } = useDragAndDrop({
     // Only accept items with the following drag type
     acceptedDragTypes: ['custom-app-type'],
+    getAllowedDropOperations: () => ["move"],
+    getItems: (keys) =>
+      [...keys].map((key) => {
+        const item = list.getItem(key);
+        // Setup the drag types and associated info for each dragged item.
+        return {
+          "custom-app-type": JSON.stringify(item),
+          "text/plain": item.value,
+        };
+      }),
+
     onInsert: async (e) => {
       const {
         items,
         target
       } = e;
+      console.log(e)
 
       const processedItems = await Promise.all(
         items.map(async (item) =>
@@ -45,6 +57,25 @@ export default function DroppableListView(props: DndListViewProps) {
         list.insertBefore(target.key, ...processedItems);
       } else if (target.dropPosition === 'after') {
         list.insertAfter(target.key, ...processedItems);
+      }
+    },
+    onReorder: async (e) => {
+      const {
+        target,
+        keys
+      } = e
+      console.log(keys)
+      const index = [...keys][0]
+      const item = list.getItem(index);
+
+      console.log(item)
+
+      if (target.dropPosition === 'before') {
+        list.remove(index);
+        list.insertBefore(target.key, item);
+      } else if (target.dropPosition === 'after') {
+        list.remove(index);
+        list.insertAfter(target.key, item);
       }
     },
     onRootDrop: async (e) => {
