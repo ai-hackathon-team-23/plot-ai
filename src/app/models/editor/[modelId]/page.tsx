@@ -10,7 +10,6 @@ import DragIntoList from "../../_components/drag-into-list";
 import {defaultTheme, Provider} from '@adobe/react-spectrum';
 import { Flex, useListData } from "@adobe/react-spectrum";
 import DraggableListView from "../../_components/draggable-list-view";
-import DroppableListView from "../../_components/droppable-list-view";
 import { PARAMS } from "../../_constants/constants";
 
 type Props = {
@@ -24,11 +23,6 @@ const ModelCreatorView = ({ params }: Props) => {
     initialItems: PARAMS
   });
 
-  const targetList = useListData({
-    initialItems: [
-      
-    ],
-  });
 
   return (
     <Provider theme={defaultTheme}  colorScheme="light">
@@ -41,8 +35,7 @@ const ModelCreatorView = ({ params }: Props) => {
         </div>
         <div className="justify-right">
           <EditBar />
-          <DroppableListView list={targetList} />
-          {/* <Canvas/> */}
+          <Canvas/>
         </div>
       </div>
     </div>
