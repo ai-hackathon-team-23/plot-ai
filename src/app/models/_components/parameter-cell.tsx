@@ -9,7 +9,7 @@ interface Props {
 export function ParameterCell({ value, label, format }: Props) {
 
     return (
-     <div>
+     <div className="text-sm">
         {label}
     </div>
     );

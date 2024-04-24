@@ -12,7 +12,7 @@ export function EditBar() {
 
   return (
     <>
-      <div className="grid grid-cols-10  border-y ">
+      <div className="width-4 grid grid-cols-10 items-center justify-center border">
         <div className="col-span-8">
           {/* {Block Title Here} */}
           <span className="inline-block pl-4 align-middle font-bold">
@@ -30,8 +30,8 @@ export function EditBar() {
           </span>
         </div>
       </div>
-      <div className="grid grid-cols-10  border-b ">
-        <div className="col-span-2 border-r-2">
+      <div className="grid grid-cols-10 border-b items-center justify-center">
+        <div className="col-span-2 border-r">
           {/* {Cell Title Here} */}
           <span className="inline-block pl-4 align-middle font-bold">
             Cell Title
@@ -41,16 +41,16 @@ export function EditBar() {
           {/* {Cell Value Here} */}
           <span className="inline-block pl-4 align-middle">Cell Value</span>
         </div>
-        <div className="justify-left col-span-2 flex">
+        <div className="justify-left col-span-2 flex ">
           <span className="pl-1">
             <DropdownSelect
-              size={"w-[160px]"}
+              size={"w-[165px]"}
               placeholder={"Format"}
               items={ITEMS_DATA_TEST}
               className="border-0 border-x shadow-none rounded-none"
             />
           </span>
-          <span className="pl-3 pr-2 pt-2">
+          <span className="pl-3 pr-2 pt-2 border-r">
             <Checkbox
               checked={checked}
               onCheckedChange={() => setChecked(!checked)}
