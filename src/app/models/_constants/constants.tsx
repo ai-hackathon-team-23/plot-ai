@@ -406,3 +406,10 @@ export const PARAMS = [
     functionality: () => {},
   },
 ]
+
+export const SECTION_HEADERS = [
+  "Property Details",
+  "Financial Valuation",
+  "Market Data",
+  "Financial Status",
+];
