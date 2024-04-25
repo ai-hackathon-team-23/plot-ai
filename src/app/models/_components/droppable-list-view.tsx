@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client"
 import type { DragAndDropOptions, TextDropItem } from "@adobe/react-spectrum";
-import { useDragAndDrop } from "@adobe/react-spectrum";
+import { ActionMenu, useDragAndDrop } from "@adobe/react-spectrum";
 import type { ListData } from "@adobe/react-spectrum";
 import {ListView, Item, Text } from "@adobe/react-spectrum";
 import { ParameterCell } from "./parameter-cell";
@@ -28,29 +28,34 @@ export default function DroppableListView(props: DndListViewProps) {
   const { list, ...otherProps } = props;
   const { dragAndDropHooks } = useDragAndDrop({
     // Only accept items with the following drag type
-    acceptedDragTypes: ['custom-app-type'],
+    acceptedDragTypes: ['custom-app-type-copy-default', 'custom-app-type-reorder'],
     getAllowedDropOperations: () => ["move"],
     getItems: (keys) =>
       [...keys].map((key) => {
         const item = list.getItem(key);
         // Setup the drag types and associated info for each dragged item.
         return {
-          "custom-app-type": JSON.stringify(item),
+          "custom-app-type-reorder": JSON.stringify(item),
           "text/plain": item.value,
         };
       }),
-
-    onInsert: async (e) => {
+      onInsert: async (e) => {
       const {
         items,
         target
       } = e;
-      console.log(e)
 
       const processedItems = await Promise.all(
-        items.map(async (item) =>
-          JSON.parse(await (item as TextDropItem).getText('custom-app-type'))
-        )
+        items.map(async (item) => (
+          {
+            ...JSON.parse(
+              await (item as TextDropItem).getText(
+                'custom-app-type-copy-default'
+              )
+            ),
+            id: Math.random().toString(36).slice(2)
+          }
+        ))
       );
 
       if (target.dropPosition === 'before') {
@@ -64,23 +69,30 @@ export default function DroppableListView(props: DndListViewProps) {
         target,
         keys
       } = e
-
+      console.log("reorder")
+   
       if (target.dropPosition === 'before') {
-        list.remove(index);
-        list.insertBefore(target.key, item);
+        list.moveBefore(target.key, [...keys]);
       } else if (target.dropPosition === 'after') {
-        list.remove(index);
-        list.insertAfter(target.key, item);
+        list.moveAfter(target.key, [...keys]);
       }
     },
     onRootDrop: async (e) => {
       const {
         items
       } = e;
+
       const processedItems = await Promise.all(
-        items.map(async (item) =>
-          JSON.parse(await (item as TextDropItem).getText('custom-app-type'))
-        )
+        items.map(async (item) => (
+          {
+            ...JSON.parse(
+              await (item as TextDropItem).getText(
+                'custom-app-type-copy-default'
+              )
+            ),
+            id: Math.random().toString(36).slice(2)
+          }
+        ))
       );
       list.append(...processedItems);
     },
@@ -92,10 +104,16 @@ export default function DroppableListView(props: DndListViewProps) {
       <ListView
         aria-label="Droppable ListView in drag into list example"
         selectionMode="single"
-        width="size-3600"
-        height="size-2400"
+        selectionStyle="highlight"
+        width="max-w-full"
+        height="max-h-full"
+        minWidth="size-3000"
+        minHeight="size-2000"
+        margin="mx-auto"
         dragAndDropHooks={dragAndDropHooks}
         items={list.items}
+        density="compact"
+        
       >
         {(item) => (
           <Item textValue={item.value}>
@@ -108,6 +126,16 @@ export default function DroppableListView(props: DndListViewProps) {
               format={item.format} 
               functionality={item.functionality}
             />
+            <ActionMenu>
+              <Item key="edit" textValue="Edit">
+                {/* <Edit /> */}
+                <Text>Edit</Text>
+              </Item>
+              <Item key="delete" textValue="Delete">
+                {/* <Delete /> */}
+                <Text>Delete</Text>
+              </Item>
+            </ActionMenu>
           </Item>
         )}
       </ListView>
