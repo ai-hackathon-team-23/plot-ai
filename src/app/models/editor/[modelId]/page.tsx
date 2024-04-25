@@ -2,10 +2,11 @@
 import React from "react";
 import { Canvas } from "../../_components/canvas";
 import { EditBar } from "../../_components/edit-bar-container";
+import { SearchBar } from "../../_components/search-bar";
+
 import {defaultTheme, Provider} from '@adobe/react-spectrum';
-import { Flex, useListData } from "@adobe/react-spectrum";
+import { useListData } from "@adobe/react-spectrum";
 import DraggableListView from "../../_components/draggable-list-view";
-import DroppableListView from "../../_components/droppable-list-view";
 import { PARAMS } from "../../_constants/constants";
 
 type Props = {
@@ -19,12 +20,6 @@ const ModelCreatorView = ({ params }: Props) => {
     initialItems: PARAMS
   });
 
-  const targetList = useListData({
-    initialItems: [
-      
-    ],
-  });
-
   return (
     <Provider theme={defaultTheme}  colorScheme="light">
     <div className="flex items-center justify-center align-middle">
@@ -34,10 +29,7 @@ const ModelCreatorView = ({ params }: Props) => {
         </div>
         <div className="justify-right">
           <EditBar />
-          <div className="pt-1">
-            <DroppableListView list={targetList} />
-          </div>
-          {/* <Canvas/> */}
+          <Canvas/>
         </div>
       </div>
     </div>

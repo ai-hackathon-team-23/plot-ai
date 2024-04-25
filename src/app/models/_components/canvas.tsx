@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import ReactFlow, {
   Controls,
   Background,
@@ -8,17 +8,38 @@ import ReactFlow, {
   ReactFlowProvider,
   useEdgesState,
   useNodesState,
+  Node,
+  NodeTypes,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
+import BlockComponent from './block-react-flow';
+
+// const initialNodes = [
+//   {
+//     id: '0',
+//     data: { label: 'Hello' },
+//     position: { x: 0, y: 0 },
+//     type: "blockComp",
+//   },
+// ];
 
 const initialNodes = [
   {
-    id: '0',
-    data: { label: 'Hello' },
+    id: '2',
+    type: 'blockComp',
+
+    // Specify the custom class acting as a drag handle
+    dragHandle: '.custom-drag-handle',
+
+    style: {
+      border: '2px solid #ddd',
+      background: 'white',
+      borderRadius: '8px',
+    },
     position: { x: 0, y: 0 },
-    type: 'input',
   },
 ];
+
 
 let id = 1;
 const getId = () => `${id++}`;
@@ -29,6 +50,7 @@ const Flow = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const connectingNodeId = useRef(null);
   const { screenToFlowPosition } = useReactFlow();
+  const nodeTypes: NodeTypes = useMemo(() => ({ blockComp: BlockComponent }), []);
 
   // const onNodesChange = useCallback(
   //   (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -93,6 +115,7 @@ const Flow = () => {
           onConnect={onConnect}
           onConnectEnd={onConnectEnd}
           fitView
+          nodeTypes={nodeTypes}
         >
           <Background />
           <Controls />
