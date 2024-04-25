@@ -64,11 +64,6 @@ export default function DroppableListView(props: DndListViewProps) {
         target,
         keys
       } = e
-      console.log(keys)
-      const index = [...keys][0]
-      const item = list.getItem(index);
-
-      console.log(item)
 
       if (target.dropPosition === 'before') {
         list.remove(index);
@@ -93,26 +88,29 @@ export default function DroppableListView(props: DndListViewProps) {
   });
 
   return (
-    <ListView
-      aria-label="Droppable ListView in drag into list example"
-      width="size-3600"
-      height="size-2400"
-      dragAndDropHooks={dragAndDropHooks}
-      items={list.items}
-    >
-      {(item) => (
-        <Item textValue={item.value}>
-           <ParameterCell  
-            id={item.id} 
-            sectionHeader={item.sectionHeader}
-            section={item.section} 
-            value={item.value} 
-            label={item.label} 
-            format={item.format} 
-            functionality={item.functionality}
-          />
-        </Item>
-      )}
-    </ListView>
+    <div className="p-4">
+      <ListView
+        aria-label="Droppable ListView in drag into list example"
+        selectionMode="single"
+        width="size-3600"
+        height="size-2400"
+        dragAndDropHooks={dragAndDropHooks}
+        items={list.items}
+      >
+        {(item) => (
+          <Item textValue={item.value}>
+            <ParameterCell  
+              id={item.id} 
+              sectionHeader={item.sectionHeader}
+              section={item.section} 
+              value={item.value} 
+              label={item.label} 
+              format={item.format} 
+              functionality={item.functionality}
+            />
+          </Item>
+        )}
+      </ListView>
+    </div>
   );
 }
