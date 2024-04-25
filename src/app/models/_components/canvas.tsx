@@ -13,17 +13,32 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import BlockComponent from './block-react-flow';
-import { useListData } from '@adobe/react-spectrum';
+
+// const initialNodes = [
+//   {
+//     id: '0',
+//     data: { label: 'Hello' },
+//     position: { x: 0, y: 0 },
+//     type: "blockComp",
+//   },
+// ];
 
 const initialNodes = [
   {
-    id: '0',
-    data: { label: 'Hello' },
+    id: '2',
+    type: 'blockComp',
+
+    // Specify the custom class acting as a drag handle
+    dragHandle: '.custom-drag-handle',
+
+    style: {
+      border: '2px solid #ddd',
+      background: 'white',
+      borderRadius: '8px',
+    },
     position: { x: 0, y: 0 },
-    type: "blockComp",
   },
 ];
-
 
 
 let id = 1;
