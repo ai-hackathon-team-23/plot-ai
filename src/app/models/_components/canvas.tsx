@@ -85,12 +85,19 @@ const Flow = () => {
         const id = getId();
         const newNode = {
           id,
+          type: 'blockComp',
+          dragHandle: '.custom-drag-handle',
           position: screenToFlowPosition({
             x: event.clientX,
             y: event.clientY,
           }),
-          data: { label: nodes.at(connectingNodeId - 1)?.data.label },
-          origin: [0.5, 0.0],
+          style: {
+            border: '2px solid #ddd',
+            background: 'white',
+            borderRadius: '8px',
+          }
+          // data: { label: nodes.at(connectingNodeId - 1)?.data.label },
+          // origin: [0.5, 0.0],
         };
 
         setNodes((nds) => nds.concat(newNode));
