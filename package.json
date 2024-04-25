@@ -13,6 +13,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@adobe/react-spectrum": "^3.34.1",
     "@auth/prisma-adapter": "^1.6.0",
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.12.1",
