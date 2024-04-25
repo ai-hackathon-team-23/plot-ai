@@ -13,7 +13,7 @@ interface Param {
 export function ParameterCell({ id, sectionHeader, section, value, label, format, functionality }: Param) {
 
     return (
-     <div className="text-sm">
+     <div>
         {label}
     </div>
     );

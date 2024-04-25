@@ -24,7 +24,7 @@ const ModelCreatorView = ({ params }: Props) => {
     <Provider theme={defaultTheme}  colorScheme="light">
     <div className="flex items-center justify-center align-middle">
       <div className="grid grid-rows-3 grid-flow-col">
-        <div className="row-span-3 justify-left">
+        <div className="row-span-3 justify-left pr-1">
           <DraggableListView list={sourceList} />
         </div>
         <div className="justify-right">

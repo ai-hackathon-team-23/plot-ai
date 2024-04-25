@@ -30,7 +30,7 @@ export function EditBar() {
           </span>
         </div>
       </div>
-      <div className="grid grid-cols-10 border-b items-center justify-center">
+      <div className="grid grid-cols-10 border-l border-b items-center justify-center">
         <div className="col-span-2 border-r">
           {/* {Cell Title Here} */}
           <span className="inline-block pl-4 align-middle font-bold">

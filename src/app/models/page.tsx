@@ -18,6 +18,7 @@ import { EditBar } from "./_components/edit-bar-container";
 import CreateModelForm from "./_components/create-model-form";
 
 import { SearchBar } from "./_components/search-bar";
+import { ModelSearchBar } from "./_components/model-search-bar";
 type Props = {};
 
 const Models = async (props: Props) => {
@@ -30,7 +31,7 @@ const Models = async (props: Props) => {
       </h2>
       <div className="flex w-full flex-col">
         <div className="mb-4 flex w-full justify-between">
-          <SearchBar/>
+          <SearchBar placeholder={"Search..."}/>
           <CreateModelForm userId={session?.user.id}/>
         </div>
         <div className="grid grid-cols-3 ">
