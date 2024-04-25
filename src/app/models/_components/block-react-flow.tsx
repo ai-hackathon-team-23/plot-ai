@@ -27,10 +27,10 @@ const BlockComponent = () => {
             <div className="mx-auto max-w-full">
                 <DroppableListView list={targetList}/>
             </div>
-            {/* <div className="custom-drag-handle absolute top-0 bottom-0 left-0 w-3 bg-white custom-drag-handle hover:bg-gray-300 rounded"></div> */}
-            {/* <div className="custom-drag-handle absolute top-0 bottom-0 right-0 w-3 bg-white custom-drag-handle hover:bg-gray-300 rounded"></div> */}
-            <div className="custom-drag-handle absolute left-0 right-0 top-0 h-3 bg-white custom-drag-handle hover:bg-gray-200 rounded"></div>
-            <div className="custom-drag-handle absolute left-0 right-0 bottom-0 h-3 bg-white custom-drag-handle hover:bg-gray-200 rounded"></div>
+            <div className="custom-drag-handle absolute top-0 bottom-0 left-0 w-4 bg-white custom-drag-handle rounded"></div>
+            <div className="custom-drag-handle absolute top-0 bottom-0 right-0 w-4 bg-white custom-drag-handle rounded"></div>
+            <div className="custom-drag-handle absolute left-0 right-0 top-0 h-4 bg-white custom-drag-handle rounded"></div>
+            <div className="custom-drag-handle absolute left-0 right-0 bottom-0 h-4 bg-white custom-drag-handle rounded"></div>
         </div>
         <Handle type="source" position={Position.Right} />
     </div>
