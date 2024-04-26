@@ -1,23 +1,28 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-misused-promises */
-"use client"
-import type { DragAndDropOptions, TextDropItem } from "@adobe/react-spectrum";
+"use client";
+import type {
+  DragAndDropOptions,
+  DropItem,
+  TextDropItem,
+} from "@adobe/react-spectrum";
 import { ActionMenu, useDragAndDrop } from "@adobe/react-spectrum";
 import type { ListData } from "@adobe/react-spectrum";
-import {ListView, Item, Text } from "@adobe/react-spectrum";
+import { ListView, Item, Text } from "@adobe/react-spectrum";
 import { ParameterCell } from "./parameter-cell";
-
-
+import { DotsVerticalIcon, TrashIcon } from "@radix-ui/react-icons";
+import { useState } from "react";
 
 interface Param {
   id: string;
-  sectionHeader: boolean;
   section: string;
   value: string;
   label: string;
   format: string;
-  functionality?: () => void;
+  input: number;
+  operator: string;
+  visible: boolean;
 }
 
 interface DndListViewProps extends DragAndDropOptions {
@@ -28,7 +33,10 @@ export default function DroppableListView(props: DndListViewProps) {
   const { list, ...otherProps } = props;
   const { dragAndDropHooks } = useDragAndDrop({
     // Only accept items with the following drag type
-    acceptedDragTypes: ['custom-app-type-copy-default', 'custom-app-type-reorder'],
+    acceptedDragTypes: [
+      "custom-app-type-copy-default",
+      "custom-app-type-reorder",
+    ],
     getAllowedDropOperations: () => ["move"],
     getItems: (keys) =>
       [...keys].map((key) => {
@@ -39,65 +47,58 @@ export default function DroppableListView(props: DndListViewProps) {
           "text/plain": item.value,
         };
       }),
-      onInsert: async (e) => {
-      const {
-        items,
-        target
-      } = e;
+    onInsert: async (e) => {
+      const { items, target } = e;
 
       const processedItems = await Promise.all(
-        items.map(async (item) => (
-          {
-            ...JSON.parse(
-              await (item as TextDropItem).getText(
-                'custom-app-type-copy-default'
-              )
+        items.map(async (item) => ({
+          ...JSON.parse(
+            await (item as TextDropItem).getText(
+              "custom-app-type-copy-default",
             ),
-            id: Math.random().toString(36).slice(2)
-          }
-        ))
+          ),
+          id: Math.random().toString(36).slice(2),
+        })),
       );
 
-      if (target.dropPosition === 'before') {
+      if (target.dropPosition === "before") {
         list.insertBefore(target.key, ...processedItems);
-      } else if (target.dropPosition === 'after') {
+      } else if (target.dropPosition === "after") {
         list.insertAfter(target.key, ...processedItems);
       }
     },
     onReorder: async (e) => {
-      const {
-        target,
-        keys
-      } = e
-      console.log("reorder")
-   
-      if (target.dropPosition === 'before') {
+      const { target, keys } = e;
+      console.log("reorder");
+
+      if (target.dropPosition === "before") {
         list.moveBefore(target.key, [...keys]);
-      } else if (target.dropPosition === 'after') {
+      } else if (target.dropPosition === "after") {
         list.moveAfter(target.key, [...keys]);
       }
     },
     onRootDrop: async (e) => {
-      const {
-        items
-      } = e;
+      const { items } = e;
 
       const processedItems = await Promise.all(
-        items.map(async (item) => (
-          {
-            ...JSON.parse(
-              await (item as TextDropItem).getText(
-                'custom-app-type-copy-default'
-              )
+        items.map(async (item) => ({
+          ...JSON.parse(
+            await (item as TextDropItem).getText(
+              "custom-app-type-copy-default",
             ),
-            id: Math.random().toString(36).slice(2)
-          }
-        ))
+          ),
+          id: Math.random().toString(36).slice(2),
+        })),
       );
       list.append(...processedItems);
     },
-    ...otherProps
+    ...otherProps,
   });
+
+  const handleDelete = (item : Param) => {
+    list.remove(item.id);
+  };
+  
 
   return (
     <div className="p-4">
@@ -113,29 +114,24 @@ export default function DroppableListView(props: DndListViewProps) {
         dragAndDropHooks={dragAndDropHooks}
         items={list.items}
         density="compact"
-        
       >
         {(item) => (
           <Item textValue={item.value}>
-            <ParameterCell  
-              id={item.id} 
-              sectionHeader={item.sectionHeader}
-              section={item.section} 
-              value={item.value} 
-              label={item.label} 
-              format={item.format} 
-              functionality={item.functionality}
+            <div className="mx-1 text-gray-500 hover:text-red-800">
+              <TrashIcon
+                onClick={() => handleDelete(item)}
+              />
+            </div>
+            <ParameterCell
+              id={item.id}
+              section={item.section}
+              value={item.value}
+              label={item.label}
+              format={item.format}
+              input={item.input}
+              operator={item.operator}
+              visible={item.visible}
             />
-            <ActionMenu>
-              <Item key="edit" textValue="Edit">
-                {/* <Edit /> */}
-                <Text>Edit</Text>
-              </Item>
-              <Item key="delete" textValue="Delete">
-                {/* <Delete /> */}
-                <Text>Delete</Text>
-              </Item>
-            </ActionMenu>
           </Item>
         )}
       </ListView>

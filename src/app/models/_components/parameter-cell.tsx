@@ -2,19 +2,25 @@ import React from "react";
 
 interface Param {
   id: string;
-  sectionHeader: boolean;
   section: string;
   value: string;
   label: string;
   format: string;
-  functionality?: () => void;
+  input: number;
+  operator: string;
+  visible: boolean;
 }
 
-export function ParameterCell({ id, sectionHeader, section, value, label, format, functionality }: Param) {
+export function ParameterCell({ id, section, value, label, input, operator, visible }: Param) {
 
     return (
-     <div>
-        {label}
-    </div>
-    );
-  }
+        <>
+          <div className="flex-1 pr-2">{label}</div>
+          {input !== 0 && ( 
+             <div className="flex-1 p-2 text-right">
+              {input}
+            </div>
+          )}
+        </>
+    )
+}
