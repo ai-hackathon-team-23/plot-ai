@@ -11,8 +11,9 @@ import { ActionMenu, useDragAndDrop } from "@adobe/react-spectrum";
 import type { ListData } from "@adobe/react-spectrum";
 import { ListView, Item, Text } from "@adobe/react-spectrum";
 import { ParameterCell } from "./parameter-cell";
-import { DotsVerticalIcon, TrashIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useModelNodesContext } from "~/app/_context/model-context";
+import { TrashIcon } from "@radix-ui/react-icons";
 
 interface Param {
   id: string;
@@ -27,19 +28,37 @@ interface Param {
 
 interface DndListViewProps extends DragAndDropOptions {
   list: ListData<Param>;
+  blockId: string;
 }
 
 export default function DroppableListView(props: DndListViewProps) {
-  const { list, ...otherProps } = props;
+  const { list, blockId, ...otherProps } = props;
+  const { setNodes } = useModelNodesContext();
+  const [currId, setCurrId] = useState(+blockId);
+
+  useEffect(() => {
+    setCurrId(+blockId);
+    console.log("rendered:", +blockId);
+  }, []);
+
+  useEffect(() => {
+    setNodes((oldNodes) => {
+      oldNodes[currId].data = list.items;
+      return oldNodes;
+    });
+  }, [currId, list, setNodes]);
+
   const { dragAndDropHooks } = useDragAndDrop({
     // Only accept items with the following drag type
     acceptedDragTypes: [
       "custom-app-type-copy-default",
       "custom-app-type-reorder",
     ],
+
     getAllowedDropOperations: () => ["move"],
-    getItems: (keys) =>
-      [...keys].map((key) => {
+
+    getItems: (keys) => 
+        [...keys].map((key) => {
         const item = list.getItem(key);
         // Setup the drag types and associated info for each dragged item.
         return {
@@ -47,8 +66,11 @@ export default function DroppableListView(props: DndListViewProps) {
           "text/plain": item.value,
         };
       }),
-    onInsert: async (e) => {
-      const { items, target } = e;
+      onInsert: async (e) => {
+      const {
+        items,
+        target
+      } = e;
 
       const processedItems = await Promise.all(
         items.map(async (item) => ({
@@ -76,6 +98,7 @@ export default function DroppableListView(props: DndListViewProps) {
       } else if (target.dropPosition === "after") {
         list.moveAfter(target.key, [...keys]);
       }
+      
     },
     onRootDrop: async (e) => {
       const { items } = e;
@@ -91,6 +114,7 @@ export default function DroppableListView(props: DndListViewProps) {
         })),
       );
       list.append(...processedItems);
+
     },
     ...otherProps,
   });
