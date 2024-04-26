@@ -1,38 +1,30 @@
 export const EDIT_OPTIONS = [
   {
     value: "rename",
-    label: "Rename",
+    label: "Rename Block",
   },
   {
     value: "delete",
-    label: "Delete",
-  },
-  {
-    value: "customize",
-    label: "Customize",
+    label: "Delete Block",
   },
 ];
 
-export const ITEMS_DATA_TEST = [
+export const OPERATIONS = [
   {
-    value: "value1",
-    label: "Label 1",
+    value: "addition",
+    label: "( + ) Add",
   },
   {
-    value: "value2",
-    label: "Label 2",
+    value: "subtraction",
+    label: "( - ) Subtract",
   },
   {
-    value: "value3",
-    label: "Label 3",
+    value: "division",
+    label: "( / ) Divide",
   },
   {
-    value: "value4",
-    label: "Label 4",
-  },
-  {
-    value: "value5",
-    label: "Label 5",
+    value: "multiplication",
+    label: "( X ) Multiply",
   },
 ];
 
