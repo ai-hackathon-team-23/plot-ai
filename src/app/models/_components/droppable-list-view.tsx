@@ -33,12 +33,11 @@ interface DndListViewProps extends DragAndDropOptions {
 
 export default function DroppableListView(props: DndListViewProps) {
   const { list, blockId, ...otherProps } = props;
-  const { setNodes } = useModelNodesContext();
+  const { setNodes, setFocus } = useModelNodesContext();
   const [currId, setCurrId] = useState(+blockId);
 
   useEffect(() => {
     setCurrId(+blockId);
-    console.log("rendered:", +blockId);
   }, []);
 
   useEffect(() => {
@@ -57,8 +56,8 @@ export default function DroppableListView(props: DndListViewProps) {
 
     getAllowedDropOperations: () => ["move"],
 
-    getItems: (keys) => 
-        [...keys].map((key) => {
+    getItems: (keys) =>
+      [...keys].map((key) => {
         const item = list.getItem(key);
         // Setup the drag types and associated info for each dragged item.
         return {
@@ -66,11 +65,8 @@ export default function DroppableListView(props: DndListViewProps) {
           "text/plain": item.value,
         };
       }),
-      onInsert: async (e) => {
-      const {
-        items,
-        target
-      } = e;
+    onInsert: async (e) => {
+      const { items, target } = e;
 
       const processedItems = await Promise.all(
         items.map(async (item) => ({
@@ -91,14 +87,12 @@ export default function DroppableListView(props: DndListViewProps) {
     },
     onReorder: async (e) => {
       const { target, keys } = e;
-      console.log("reorder");
 
       if (target.dropPosition === "before") {
         list.moveBefore(target.key, [...keys]);
       } else if (target.dropPosition === "after") {
         list.moveAfter(target.key, [...keys]);
       }
-      
     },
     onRootDrop: async (e) => {
       const { items } = e;
@@ -114,15 +108,13 @@ export default function DroppableListView(props: DndListViewProps) {
         })),
       );
       list.append(...processedItems);
-
     },
     ...otherProps,
   });
 
-  const handleDelete = (item : Param) => {
+  const handleDelete = (item: Param) => {
     list.remove(item.id);
   };
-  
 
   return (
     <div className="p-4">
@@ -142,20 +134,38 @@ export default function DroppableListView(props: DndListViewProps) {
         {(item) => (
           <Item textValue={item.value}>
             <div className="mx-1 text-gray-500 hover:text-red-800">
-              <TrashIcon
-                onClick={() => handleDelete(item)}
+              <TrashIcon onClick={() => handleDelete(item)} />
+            </div>
+            <div
+              onClick={() => {
+                setFocus(item);
+              }}
+            >
+              <ParameterCell
+                id={item.id}
+                section={item.section}
+                value={item.value}
+                label={item.label}
+                format={item.format}
+                input={item.input}
+                operator={item.operator}
+                visible={item.visible}
               />
             </div>
-            <ParameterCell
-              id={item.id}
-              section={item.section}
-              value={item.value}
-              label={item.label}
-              format={item.format}
-              input={item.input}
-              operator={item.operator}
-              visible={item.visible}
-            />
+            <ActionMenu
+              onAction={(key) => {
+                key == "delete" && list.remove(item.id);
+              }}
+            >
+              <Item key="edit" textValue="Edit">
+                <Text>Edit</Text>
+                {/* <Edit /> */}
+              </Item>
+              <Item key="delete" textValue="Delete">
+                {/* <Delete /> */}
+                <Text>Delete</Text>
+              </Item>
+            </ActionMenu>
           </Item>
         )}
       </ListView>
