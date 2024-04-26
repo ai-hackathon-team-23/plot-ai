@@ -14,12 +14,13 @@ import {
 
 export interface ModelListParams {
   id: string;
-  sectionHeader: boolean;
   section: string;
   value: string;
   label: string;
   format: string;
-  functionality?: () => void;
+  input: number;
+  operator: string;
+  visible: boolean;
 }
 
 export interface DndListViewProps extends DragAndDropOptions {
@@ -88,12 +89,13 @@ function DraggableListView(props: DndListViewProps) {
                       <ParameterCell
                         id={item.id}
                         key={item.id}
-                        sectionHeader={item.sectionHeader}
                         section={item.section}
                         value={item.value}
                         label={item.label}
                         format={item.format}
-                        functionality={item.functionality}
+                        input={item.input}
+                        operator={item.operator}
+                        visible={item.visible}
                       />
                     </Item>
                   )}

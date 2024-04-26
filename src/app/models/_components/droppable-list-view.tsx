@@ -2,22 +2,28 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 "use client";
-import type { DragAndDropOptions, TextDropItem } from "@adobe/react-spectrum";
+import type {
+  DragAndDropOptions,
+  DropItem,
+  TextDropItem,
+} from "@adobe/react-spectrum";
 import { ActionMenu, useDragAndDrop } from "@adobe/react-spectrum";
 import type { ListData } from "@adobe/react-spectrum";
 import { ListView, Item, Text } from "@adobe/react-spectrum";
 import { ParameterCell } from "./parameter-cell";
 import { useEffect, useState } from "react";
 import { useModelNodesContext } from "~/app/_context/model-context";
+import { TrashIcon } from "@radix-ui/react-icons";
 
 interface Param {
   id: string;
-  sectionHeader: boolean;
   section: string;
   value: string;
   label: string;
   format: string;
-  functionality?: () => void;
+  input: number;
+  operator: string;
+  visible: boolean;
 }
 
 interface DndListViewProps extends DragAndDropOptions {
@@ -48,21 +54,24 @@ export default function DroppableListView(props: DndListViewProps) {
       "custom-app-type-copy-default",
       "custom-app-type-reorder",
     ],
+
     getAllowedDropOperations: () => ["move"],
 
-    getItems: (keys) => {
-      return [...keys].map((key) => {
+    getItems: (keys) => 
+        [...keys].map((key) => {
         const item = list.getItem(key);
         // Setup the drag types and associated info for each dragged item.
         return {
           "custom-app-type-reorder": JSON.stringify(item),
           "text/plain": item.value,
         };
-      });
-    },
+      }),
+      onInsert: async (e) => {
+      const {
+        items,
+        target
+      } = e;
 
-    onInsert: async (e) => {
-      const { items, target } = e;
       const processedItems = await Promise.all(
         items.map(async (item) => ({
           ...JSON.parse(
@@ -109,6 +118,12 @@ export default function DroppableListView(props: DndListViewProps) {
     },
     ...otherProps,
   });
+
+  const handleDelete = (item : Param) => {
+    list.remove(item.id);
+  };
+  
+
   return (
     <div className="p-4">
       <ListView
@@ -126,29 +141,21 @@ export default function DroppableListView(props: DndListViewProps) {
       >
         {(item) => (
           <Item textValue={item.value}>
+            <div className="mx-1 text-gray-500 hover:text-red-800">
+              <TrashIcon
+                onClick={() => handleDelete(item)}
+              />
+            </div>
             <ParameterCell
               id={item.id}
-              sectionHeader={item.sectionHeader}
               section={item.section}
               value={item.value}
               label={item.label}
               format={item.format}
-              functionality={item.functionality}
+              input={item.input}
+              operator={item.operator}
+              visible={item.visible}
             />
-            <ActionMenu
-              onAction={(key) => {
-                key == "delete" && list.remove(item.id);
-              }}
-            >
-              <Item key="edit" textValue="Edit">
-                <Text>Edit</Text>
-                {/* <Edit /> */}
-              </Item>
-              <Item key="delete" textValue="Delete">
-                {/* <Delete /> */}
-                <Text>Delete</Text>
-              </Item>
-            </ActionMenu>
           </Item>
         )}
       </ListView>
