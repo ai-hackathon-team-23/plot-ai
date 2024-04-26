@@ -13,7 +13,12 @@ import { ListView, Item, Text } from "@adobe/react-spectrum";
 import { ParameterCell } from "./parameter-cell";
 import { useEffect, useState } from "react";
 import { useModelNodesContext } from "~/app/_context/model-context";
-import { TrashIcon } from "@radix-ui/react-icons";
+import {
+  PlusIcon,
+  Cross2Icon,
+  SlashIcon,
+  MinusIcon,
+} from "@radix-ui/react-icons";
 
 interface Param {
   id: string;
@@ -57,8 +62,8 @@ export default function DroppableListView(props: DndListViewProps) {
 
     getAllowedDropOperations: () => ["move"],
 
-    getItems: (keys) => 
-        [...keys].map((key) => {
+    getItems: (keys) =>
+      [...keys].map((key) => {
         const item = list.getItem(key);
         // Setup the drag types and associated info for each dragged item.
         return {
@@ -66,11 +71,8 @@ export default function DroppableListView(props: DndListViewProps) {
           "text/plain": item.value,
         };
       }),
-      onInsert: async (e) => {
-      const {
-        items,
-        target
-      } = e;
+    onInsert: async (e) => {
+      const { items, target } = e;
 
       const processedItems = await Promise.all(
         items.map(async (item) => ({
@@ -98,7 +100,6 @@ export default function DroppableListView(props: DndListViewProps) {
       } else if (target.dropPosition === "after") {
         list.moveAfter(target.key, [...keys]);
       }
-      
     },
     onRootDrop: async (e) => {
       const { items } = e;
@@ -114,15 +115,13 @@ export default function DroppableListView(props: DndListViewProps) {
         })),
       );
       list.append(...processedItems);
-
     },
     ...otherProps,
   });
 
-  const handleDelete = (item : Param) => {
+  const handleDelete = (item: Param) => {
     list.remove(item.id);
   };
-  
 
   return (
     <div className="p-4">
@@ -141,10 +140,18 @@ export default function DroppableListView(props: DndListViewProps) {
       >
         {(item) => (
           <Item textValue={item.value}>
-            <div className="mx-1 text-gray-500 hover:text-red-800">
-              <TrashIcon
-                onClick={() => handleDelete(item)}
-              />
+            <div className="mx-1 text-gray-500">
+              {item.operator == "addition" ? (
+                <PlusIcon />
+              ) : item.operator == "subtraction" ? (
+                <MinusIcon />
+              ) : item.operator == "multiplication" ? (
+                <Cross2Icon />
+              ) : item.operator == "division" ? (
+                <SlashIcon />
+              ) : (
+                ""
+              )}
             </div>
             <ParameterCell
               id={item.id}
