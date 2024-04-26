@@ -70,7 +70,7 @@ const ModelCreatorView = ({ params }: Props) => {
                   cellVisible={cellVisible}
                   setCellVisible={handleSetVisible}
                 />
-                <Canvas />
+                <Canvas modelId={modelId}/>
               </div>
             </div>
           </div>

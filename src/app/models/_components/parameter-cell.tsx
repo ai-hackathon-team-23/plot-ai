@@ -1,6 +1,6 @@
 import React from "react";
 
-interface Param {
+interface Param extends React.ComponentProps<"div"> {
   id: string;
   sectionHeader: boolean;
   section: string;
@@ -10,10 +10,10 @@ interface Param {
   functionality?: () => void;
 }
 
-export function ParameterCell({ id, sectionHeader, section, value, label, format, functionality }: Param) {
+export function ParameterCell({ id, sectionHeader, section, value, label, format, functionality, ...props }: Param) {
 
     return (
-     <div>
+     <div {...props}>
         {label}
     </div>
     );

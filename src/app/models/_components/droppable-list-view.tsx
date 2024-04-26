@@ -27,7 +27,7 @@ interface DndListViewProps extends DragAndDropOptions {
 
 export default function DroppableListView(props: DndListViewProps) {
   const { list, blockId, ...otherProps } = props;
-  const { setNodes } = useModelNodesContext();
+  const { setNodes, setFocus } = useModelNodesContext();
   const [currId, setCurrId] = useState(+blockId);
 
   useEffect(() => {
@@ -134,6 +134,7 @@ export default function DroppableListView(props: DndListViewProps) {
               label={item.label}
               format={item.format}
               functionality={item.functionality}
+              onClick={() => {setFocus(item)}}
             />
             <ActionMenu
               onAction={(key) => {

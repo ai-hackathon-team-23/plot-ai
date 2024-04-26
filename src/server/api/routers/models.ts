@@ -52,13 +52,13 @@ export const modelsRouter = createTRPCRouter({
     }),
 
   update: protectedProcedure
-    .input(z.object({ modelId: z.string(), modelObject: z.object({}) }))
+    .input(z.object({ modelId: z.string(), modelObject: z.array([]) }))
     .mutation(async ({ ctx, input }) => {
       const { modelId, modelObject } = input;
 
       const updatedModel = await ctx.db.models.update({
         where: { id: modelId },
-        data: modelObject,
+        data: JSON.stringify(modelObject),
       });
 
       return updatedModel;
