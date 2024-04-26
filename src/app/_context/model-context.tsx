@@ -36,6 +36,8 @@ interface ContextProps {
   onConnectStart: (_: unknown, { nodeId }: { nodeId: unknown }) => void;
   onConnectEnd: (event: unknown) => void;
   blockId: string;
+  focus: unknown;
+  setFocus: Dispatch<SetStateAction<undefined>>;
 }
 
 let id = 0;
@@ -68,10 +70,13 @@ const ModelNodesContext = createContext<ContextProps>({
   onConnectEnd: () => null,
   onConnectStart: () => null,
   blockId: "",
+  focus: null,
+  setFocus: () => null,
 });
 const ModelNodesContextProvider = ({
   children,
 }: HTMLAttributes<HTMLDivElement>) => {
+  const [focus, setFocus] = useState();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const connectingNodeId = useRef(null);
@@ -125,7 +130,6 @@ const ModelNodesContextProvider = ({
     [screenToFlowPosition],
   );
 
-
   return (
     <ModelNodesContext.Provider
       value={{
@@ -139,6 +143,8 @@ const ModelNodesContextProvider = ({
         onConnectEnd,
         onConnectStart,
         blockId: id.toString(),
+        focus,
+        setFocus,
       }}
     >
       {children}
