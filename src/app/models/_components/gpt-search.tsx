@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { Button } from "~/components/ui/button";
 
 interface SearchResult {
   // Define your search result interface here based on your API response
@@ -12,6 +13,7 @@ const GptSearchPage: React.FC = ({ keys }) => {
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
   const options = {
     method: "POST",
+    mode: "no-cors",
     headers: {
       accept: "text/plain",
       "x-api-key": keys[0],
@@ -33,7 +35,8 @@ const GptSearchPage: React.FC = ({ keys }) => {
   };
 
   return (
-    <div className="flex h-screen items-center justify-center">
+    <div className="flex flex-col h-screen items-center justify-center">
+      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-10">Use AI to find properties:</h1>
       <form
         className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg"
         onSubmit={handleSubmit}
@@ -55,12 +58,9 @@ const GptSearchPage: React.FC = ({ keys }) => {
             required
           />
         </div>
-        <button
-          type="submit"
-          className="focus:shadow-outline w-full rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-        >
-          Search
-        </button>
+        <Button type="submit">
+          Submit
+        </Button>
       </form>
       {searchResult && (
         <div className="mt-8">
