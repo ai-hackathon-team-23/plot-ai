@@ -1,10 +1,10 @@
-"use client"
-import React from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { Canvas } from "../../_components/canvas";
 import { EditBar } from "../../_components/edit-bar-container";
 import { SearchBar } from "../../_components/search-bar";
 
-import {defaultTheme, Provider} from '@adobe/react-spectrum';
+import { defaultTheme, Provider } from "@adobe/react-spectrum";
 import { useListData } from "@adobe/react-spectrum";
 import DraggableListView from "../../_components/draggable-list-view";
 import { PARAMS } from "../../_constants/constants";
@@ -16,23 +16,61 @@ type Props = {
 const ModelCreatorView = ({ params }: Props) => {
   const { modelId } = params;
 
+  const [blockTitle, setBlockTitle] = useState("");
+  const [blockAction, setBlockAction] = useState("");
+  const [cellTitle, setCellTitle] = useState("");
+  const [cellValue, setCellValue] = useState("");
+  const [cellOperator, setCellOperator] = useState("");
+  const [cellVisible, setCellVisible] = useState(true);
+
+  const handleBlockActionChange = (value: string) => {
+    setBlockAction(value);
+  };
+
+  const handleCellValueChange = (value: string) => {
+    setCellValue(value);
+  };
+
+  const handleOperatorChange = (value: string) => {
+    setCellOperator(value);
+  };
+
+  const handleSetVisible = (cellVisible: boolean) => {
+    setCellVisible(cellVisible);
+  };
+
+  // useEffect(() => {
+  //   console.log();
+  // }, []);
+
   const sourceList = useListData({
-    initialItems: PARAMS
+    initialItems: PARAMS,
   });
 
   return (
-    <Provider theme={defaultTheme}  colorScheme="light">
-    <div className="flex items-center justify-center align-middle">
-      <div className="grid grid-rows-3 grid-flow-col">
-        <div className="row-span-3 justify-left pr-1">
-          <DraggableListView list={sourceList} />
-        </div>
-        <div className="justify-right">
-          <EditBar />
-          <Canvas/>
+    <Provider theme={defaultTheme} colorScheme="light">
+      <div className="flex items-center justify-center align-middle">
+        <div className="grid grid-flow-col grid-rows-3">
+          <div className="justify-left row-span-3 pr-1">
+            <DraggableListView list={sourceList} />
+          </div>
+          <div className="justify-right">
+            <EditBar
+              blockTitle={"Block Title"}
+              blockAction={blockAction}
+              setBlockAction={handleBlockActionChange}
+              cellTitle={"Cell Title"}
+              cellValue={cellValue}
+              setCellValue={handleCellValueChange}
+              cellOperator={cellOperator}
+              setCellOperator={handleOperatorChange}
+              cellVisible={cellVisible}
+              setCellVisible={handleSetVisible}
+            />
+            <Canvas />
+          </div>
         </div>
       </div>
-    </div>
     </Provider>
   );
 };
