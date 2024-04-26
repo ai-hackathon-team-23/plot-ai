@@ -6,10 +6,11 @@ import { EDIT_OPTIONS, ITEMS_DATA_TEST } from "../_constants/constants";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownSelect } from "./dropdown-select";
 import { useState } from "react";
+import { useModelNodesContext } from "~/app/_context/model-context";
 
 export function EditBar() {
   const [checked, setChecked] = useState(false);
-
+  const {nodes} = useModelNodesContext();
   return (
     <>
       <div className="width-4 grid grid-cols-10 items-center justify-center border">

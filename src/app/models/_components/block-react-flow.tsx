@@ -1,38 +1,30 @@
 "use client";
 
-import React, { memo } from "react";
-import { useCallback } from "react";
+import React, { memo, useState } from "react";
 import DroppableListView from "./droppable-list-view";
-import { Handle, Position } from 'reactflow';
+import { Handle, Position } from "reactflow";
 import { useListData } from "@adobe/react-spectrum";
+import { useModelNodesContext } from "~/app/_context/model-context";
 
-const onConnect = (params) => console.log('handle onConnect', params);
+const onConnect = (params) => console.log("handle onConnect", params);
 
 const BlockComponent = () => {
-  const onChange = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(evt.target.value);
-  }, []);
-
+  const { blockId } = useModelNodesContext();
   const targetList = useListData({
-    initialItems: [
-      
-    ],
+    initialItems: [],
   });
+
 
   return (
     <div className="relative">
-        <Handle type="target" position={Position.Left} onConnect={onConnect} />
+      <Handle type="target" position={Position.Left} onConnect={onConnect} />
 
-        <div className="relative">
-            <div className="mx-auto max-w-full">
-                <DroppableListView list={targetList}/>
-            </div>
-            <div className="custom-drag-handle absolute top-0 bottom-0 left-0 w-4 bg-white custom-drag-handle rounded"></div>
-            <div className="custom-drag-handle absolute top-0 bottom-0 right-0 w-4 bg-white custom-drag-handle rounded"></div>
-            <div className="custom-drag-handle absolute left-0 right-0 top-0 h-4 bg-white custom-drag-handle rounded"></div>
-            <div className="custom-drag-handle absolute left-0 right-0 bottom-0 h-4 bg-white custom-drag-handle rounded"></div>
+      <div className="relative">
+        <div className="">
+          <DroppableListView list={targetList} blockId={blockId} />
         </div>
-        <Handle type="source" position={Position.Right} />
+      </div>
+      <Handle type="source" position={Position.Right} />
     </div>
   );
 };

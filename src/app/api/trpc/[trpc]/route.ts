@@ -1,3 +1,4 @@
+import { httpBatchLink } from "@trpc/client";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 import { type NextRequest } from "next/server";
 

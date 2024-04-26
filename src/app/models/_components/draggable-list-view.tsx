@@ -12,7 +12,7 @@ import {
   MagnifyingGlassIcon,
 } from "@radix-ui/react-icons";
 
-interface Param {
+export interface ModelListParams {
   id: string;
   sectionHeader: boolean;
   section: string;
@@ -21,20 +21,21 @@ interface Param {
   format: string;
   functionality?: () => void;
 }
-interface DndListViewProps extends DragAndDropOptions {
-  list: ListData<Param>;
+
+export interface DndListViewProps extends DragAndDropOptions {
+  list: ListData<ModelListParams>;
 }
 
 function DraggableListView(props: DndListViewProps) {
   const { list, ...otherProps } = props;
+
   const { dragAndDropHooks } = useDragAndDrop({
     getItems: (keys) =>
       [...keys].map((key) => {
         const item = list.getItem(key);
-        console.log(item);
         // Setup the drag types and associated info for each dragged item.
         return {
-          'custom-app-type-copy-default': JSON.stringify(item),
+          "custom-app-type-copy-default": JSON.stringify(item),
           "text/plain": item.value,
         };
       }),
