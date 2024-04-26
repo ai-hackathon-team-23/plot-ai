@@ -1,16 +1,26 @@
 import React from "react";
 
-interface Props {
-    value: string;
-    label: string;
-    format: string;
-  }
+interface Param {
+  id: string;
+  section: string;
+  value: string;
+  label: string;
+  format: string;
+  input: number;
+  operator: string;
+  visible: boolean;
+}
 
-export function ParameterCell({ value, label, format }: Props) {
+export function ParameterCell({ id, section, value, label, input, operator, visible }: Param) {
 
     return (
-     <div className="text-sm">
-        {label}
-    </div>
-    );
-  }
+        <>
+          <div className="flex-1 pr-2">{label}</div>
+          {input !== 0 && ( 
+             <div className="flex-1 p-2 text-right">
+              {input}
+            </div>
+          )}
+        </>
+    )
+}

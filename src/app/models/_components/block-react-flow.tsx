@@ -1,30 +1,32 @@
 "use client";
 
-import React from "react";
-import { useCallback } from "react";
+import React, { memo, useState } from "react";
 import DroppableListView from "./droppable-list-view";
+import { Handle, Position } from "reactflow";
 import { useListData } from "@adobe/react-spectrum";
+import { useModelNodesContext } from "~/app/_context/model-context";
 
-// type Props = {};"use client";
-
-const handleStyle = { left: 10 };
+const onConnect = (params) => console.log("handle onConnect", params);
 
 const BlockComponent = () => {
-  const onChange = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(evt.target.value);
-  }, []);
-
+  const { blockId } = useModelNodesContext();
   const targetList = useListData({
-    initialItems: [
-      
-    ],
+    initialItems: [],
   });
 
+
   return (
-    <>
-      <DroppableListView list={targetList} />
-    </>
+    <div className="relative">
+      <Handle type="target" position={Position.Left} onConnect={onConnect} />
+
+      <div className="relative">
+        <div className="">
+          <DroppableListView list={targetList} blockId={blockId} />
+        </div>
+      </div>
+      <Handle type="source" position={Position.Right} />
+    </div>
   );
 };
 
-export default BlockComponent;
+export default memo(BlockComponent);

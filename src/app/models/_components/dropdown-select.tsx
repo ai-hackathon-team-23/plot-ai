@@ -10,10 +10,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "~/lib/utils";
+import { useEffect } from "react";
 interface DropdownProps extends React.ComponentProps<typeof SelectTrigger> {
   size: string;
   placeholder: string;
   items: { value: string; label: string }[];
+  onValueChange: string;
 }
 
 export function DropdownSelect({
@@ -21,10 +23,11 @@ export function DropdownSelect({
   placeholder,
   items,
   className,
+  onValueChange,
   ...props
 }: DropdownProps) {
   return (
-    <Select>
+    <Select onValueChange={onValueChange}>
       <SelectTrigger className={cn(size, className)} {...props}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

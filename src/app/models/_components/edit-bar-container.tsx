@@ -1,22 +1,45 @@
 "use client";
 
 import * as React from "react";
-import { EDIT_OPTIONS, ITEMS_DATA_TEST } from "../_constants/constants";
+import { EDIT_OPTIONS, OPERATIONS } from "../_constants/constants";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownSelect } from "./dropdown-select";
 import { useState } from "react";
+import { Input } from "~/components/ui/input";
 
-export function EditBar() {
-  const [checked, setChecked] = useState(false);
+interface EditBarProps {
+  blockTitle: string;
+  cellTitle: string;
+  blockAction: string;
+  setBlockAction: React.Dispatch<React.SetStateAction<string>>;
+  cellValue: string;
+  setCellValue: React.Dispatch<React.SetStateAction<string>>;
+  cellOperator: string;
+  setCellOperator: React.Dispatch<React.SetStateAction<string>>;
+  cellVisible: boolean;
+  setCellVisible: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
+export function EditBar({
+  blockTitle,
+  cellTitle,
+  blockAction,
+  setBlockAction,
+  cellValue,
+  setCellValue,
+  cellOperator,
+  setCellOperator,
+  cellVisible,
+  setCellVisible,
+}: EditBarProps) {
   return (
     <>
       <div className="width-4 grid grid-cols-10 items-center justify-center border">
         <div className="col-span-8">
           {/* {Block Title Here} */}
           <span className="inline-block pl-4 align-middle font-bold">
-            Block Title
+            {blockTitle}
           </span>
         </div>
         <div className="col-span-2 flex justify-end">
@@ -25,35 +48,42 @@ export function EditBar() {
               size={"w-[200px]"}
               placeholder={"Edit"}
               items={EDIT_OPTIONS}
-              className="border-0 border-l shadow-none rounded-none"
+              className="rounded-none border-0 border-l shadow-none"
+              onValueChange={setBlockAction}
             />
           </span>
         </div>
       </div>
-      <div className="grid grid-cols-10 border-b items-center justify-center">
+      <div className="grid grid-cols-10 items-center justify-center border-b border-l">
         <div className="col-span-2 border-r">
-          {/* {Cell Title Here} */}
           <span className="inline-block pl-4 align-middle font-bold">
-            Cell Title
+            {cellTitle}
           </span>
         </div>
         <div className="col-span-6">
-          {/* {Cell Value Here} */}
-          <span className="inline-block pl-4 align-middle">Cell Value</span>
+          <span className="block w-full pl-4">
+            <Input
+              type="number"
+              placeholder="Cell Value"
+              className="w-full border-0 focus-visible:ring-0"
+              onChange={(e) => setCellValue(e.target.value)}
+            />
+          </span>
         </div>
         <div className="justify-left col-span-2 flex ">
           <span className="pl-1">
             <DropdownSelect
               size={"w-[165px]"}
-              placeholder={"Format"}
-              items={ITEMS_DATA_TEST}
-              className="border-0 border-x shadow-none rounded-none"
+              placeholder={"Operation"}
+              items={OPERATIONS}
+              className="rounded-none border-0 border-x shadow-none"
+              onValueChange={setCellOperator}
             />
           </span>
-          <span className="pl-3 pr-2 pt-2 border-r">
+          <span className="border-r pl-3 pr-2 pt-2">
             <Checkbox
-              checked={checked}
-              onCheckedChange={() => setChecked(!checked)}
+              checked={cellVisible}
+              onCheckedChange={() => setCellVisible(cellVisible)}
               className={"border border-dashed"}
             />
           </span>
