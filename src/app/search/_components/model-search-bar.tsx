@@ -18,7 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { PARAMETER_LIST_DATA } from "../_constants/constants";
+import { PARAMETER_LIST_DATA } from "../../models/_constants/constants";
 
 const parameters = [
   {
@@ -43,7 +43,7 @@ const parameters = [
   },
 ];
 
-export function ModelSearchBar() {
+export function ModelSearchBar({models}) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
   const [label, setLabel] = React.useState("");
@@ -56,37 +56,35 @@ export function ModelSearchBar() {
           aria-expanded={open}
           className="w-[300px] justify-between bg-white text-black hover:bg-gray-200"
         >
-          {value ? label : "Select parameters..."}
+          {value ? label : "Select a model..."}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
         <Command>
-          <CommandInput placeholder="Search parameter..." />
+          <CommandInput placeholder="Select a model..." />
           <CommandList>
-            <CommandEmpty>No parameter found.</CommandEmpty>
+            <CommandEmpty>No model found.</CommandEmpty>
             <CommandGroup>
-              {PARAMETER_LIST_DATA.map((section) =>
-                section.parameters.map((parameter) => (
-                  <CommandItem
-                    key={parameter.value}
-                    value={parameter.value}
-                    onSelect={(currentValue) => {
-                      setValue(currentValue === value ? "" : currentValue);
-                      setLabel(parameter.label);
-                      setOpen(false);
-                    }}
-                  >
-                    <CheckIcon
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        value === parameter.value ? "opacity-100" : "opacity-0",
-                      )}
-                    />
-                    {parameter.label}
-                  </CommandItem>
-                )),
-              )}
+              {models.map((model) => (
+                <CommandItem
+                  key={model.id}
+                  value={model.name}
+                  onSelect={(currentValue) => {
+                    setValue(currentValue === value ? "" : currentValue);
+                    setLabel(model.name);
+                    setOpen(false);
+                  }}
+                >
+                  <CheckIcon
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === model.name ? "opacity-100" : "opacity-0",
+                    )}
+                  />
+                  {model.name}
+                </CommandItem>
+              ))}
             </CommandGroup>
           </CommandList>
         </Command>
@@ -94,3 +92,23 @@ export function ModelSearchBar() {
     </Popover>
   );
 }
+
+// {models.map((model) => (
+//   <CommandItem
+//     key={model.id}
+//     value={model.name}
+//     onSelect={(currentValue) => {
+//       setValue(currentValue === value ? "" : currentValue);
+//       setLabel(model.name);
+//       setOpen(false);
+//     }}
+//   >
+//     <CheckIcon
+//       className={cn(
+//         "mr-2 h-4 w-4",
+//         value === model.name ? "opacity-100" : "opacity-0",
+//       )}
+//     />
+//     {model.name}
+//   </CommandItem>
+// ))}

@@ -18,7 +18,7 @@ import { EditBar } from "./_components/edit-bar-container";
 import CreateModelForm from "./_components/create-model-form";
 
 import { SearchBar } from "./_components/search-bar";
-import { ModelSearchBar } from "./_components/model-search-bar";
+import { ModelSearchBar } from "../search/_components/model-search-bar";
 type Props = {};
 
 const Models = async (props: Props) => {
