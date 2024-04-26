@@ -1,14 +1,15 @@
 "use client";
+"use client";
 import React, { useState, useEffect } from "react";
-import { Canvas } from "../../_components/canvas";
 import { EditBar } from "../../_components/edit-bar-container";
-import { SearchBar } from "../../_components/search-bar";
-
 import { defaultTheme, Provider } from "@adobe/react-spectrum";
+import { SearchBar } from "../../_components/search-bar";
 import { useListData } from "@adobe/react-spectrum";
 import DraggableListView from "../../_components/draggable-list-view";
 import { PARAMS } from "../../_constants/constants";
-
+import { ReactFlowProvider } from "reactflow";
+import { ModelNodesContextProvider } from "~/app/_context/model-context";
+import Canvas from "../../_components/canvas";
 type Props = {
   params: { modelId: string };
 };
@@ -49,28 +50,32 @@ const ModelCreatorView = ({ params }: Props) => {
 
   return (
     <Provider theme={defaultTheme} colorScheme="light">
-      <div className="flex items-center justify-center align-middle">
-        <div className="grid grid-flow-col grid-rows-3">
-          <div className="justify-left row-span-3 pr-1">
-            <DraggableListView list={sourceList} />
+      <ReactFlowProvider>
+        <ModelNodesContextProvider>
+          <div className="flex items-center justify-center align-middle">
+            <div className="grid grid-flow-col grid-rows-3">
+              <div className="justify-left row-span-3 pr-1">
+                <DraggableListView list={sourceList} />
+              </div>
+              <div className="justify-right">
+                <EditBar
+                  blockTitle={"Block Title"}
+                  blockAction={blockAction}
+                  setBlockAction={handleBlockActionChange}
+                  cellTitle={"Cell Title"}
+                  cellValue={cellValue}
+                  setCellValue={handleCellValueChange}
+                  cellOperator={cellOperator}
+                  setCellOperator={handleOperatorChange}
+                  cellVisible={cellVisible}
+                  setCellVisible={handleSetVisible}
+                />
+                <Canvas />
+              </div>
+            </div>
           </div>
-          <div className="justify-right">
-            <EditBar
-              blockTitle={"Block Title"}
-              blockAction={blockAction}
-              setBlockAction={handleBlockActionChange}
-              cellTitle={"Cell Title"}
-              cellValue={cellValue}
-              setCellValue={handleCellValueChange}
-              cellOperator={cellOperator}
-              setCellOperator={handleOperatorChange}
-              cellVisible={cellVisible}
-              setCellVisible={handleSetVisible}
-            />
-            <Canvas />
-          </div>
-        </div>
-      </div>
+        </ModelNodesContextProvider>
+      </ReactFlowProvider>
     </Provider>
   );
 };
