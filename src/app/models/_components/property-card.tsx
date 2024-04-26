@@ -1,6 +1,6 @@
 import React from "react";
 
-const PropertyCard = ({ imageUrl, price, address, params }) => {
+const PropertyCard = ({ imageUrl, price, address, propDetails }) => {
   return (
     <div className="flex justify-center">
       <div className="w-400">
@@ -17,7 +17,7 @@ const PropertyCard = ({ imageUrl, price, address, params }) => {
               <h2 className="mb-2 text-xl font-semibold">${price}</h2>
               <p className="mb-4 text-gray-700">{address}</p>
             </div>
-            {params?.map((param) => (
+            {propDetails?.map((param) => (
               <p className="font-bold text-gray-800">Param</p>
             ))}
           </div>
