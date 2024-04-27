@@ -11,6 +11,7 @@ interface SearchResult {
 const GptSearchPage: React.FC = ({ keys }) => {
   const [query, setQuery] = useState<string>("");
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
+
   const options = {
     method: "POST",
     mode: "no-cors",
@@ -27,16 +28,46 @@ const GptSearchPage: React.FC = ({ keys }) => {
     }),
   };
 
+  // Fetching Data Here
   const handleSubmit = async () => {
     fetch("https://api.realestateapi.com/v2/PropGPT", options)
       .then((response) => response.json())
-      .then((response) => console.log(response))
+      .then((response) => {
+        /* Do something with the response */
+        findPropertyMatches(response, nodeData);
+      })
       .catch((err) => console.error(err));
   };
 
+  // This function will find matching parameters in both json objects and populate the matches
+  // list with the key and the value (response: ApiResponse, nodeData: The model's node data returned by our database)
+  function findPropertyMatches(response, nodeData) {
+    // Extract key names and values from the first JSON object
+    const keyValues = response.data[0];
+
+    // Initialize an array to store matches with values
+    const matches = [];
+
+    // Iterate over the 'data' array in the second JSON object
+    nodeData.nodes.forEach((node) => {
+      node.data.forEach((dataItem) => {
+        // Check if the 'value' key exists
+        if (dataItem.hasOwnProperty("value")) {
+          // Check if the value matches any key names from the first JSON object
+          const keyName = dataItem.value;
+          if (keyValues.hasOwnProperty(keyName)) {
+            matches.push({ key: keyName, value: keyValues[keyName] });
+          }
+        }
+      });
+    });
+  }
+
   return (
-    <div className="flex flex-col h-screen items-center justify-center">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl mb-10">Use AI to find properties:</h1>
+    <div className="flex h-screen flex-col items-center justify-center">
+      <h1 className="mb-10 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+        Use AI to find properties:
+      </h1>
       <form
         className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg"
         onSubmit={handleSubmit}
@@ -58,7 +89,7 @@ const GptSearchPage: React.FC = ({ keys }) => {
             required
           />
         </div>
-        <Button type="submit">
+        <Button type="button" onClick={handleSubmit}>
           Submit
         </Button>
       </form>
