@@ -1,6 +1,7 @@
 import { postRouter } from "~/server/api/routers/post";
 import { modelsRouter } from "~/server/api/routers/models";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
+import { propertySearchRouter } from "./routers/propertySearch";
 
 /**
  * This is the primary router for your server.
@@ -9,7 +10,8 @@ import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
-  models: modelsRouter
+  models: modelsRouter,
+  propertySearch: propertySearchRouter,
 });
 
 // export type definition of API
@@ -23,4 +25,3 @@ export type AppRouter = typeof appRouter;
  *       ^? Post[]
  */
 export const createCaller = createCallerFactory(appRouter);
-

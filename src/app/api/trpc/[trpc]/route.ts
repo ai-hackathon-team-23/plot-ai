@@ -19,11 +19,6 @@ const createContext = async (req: NextRequest) => {
 };
 
 const handler = async (req: NextRequest, res: NextApiResponse) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Request-Method", "*");
-  res.setHeader("Access-Control-Allow-Methods", "OPTIONS, GET");
-  res.setHeader("Access-Control-Allow-Headers", "*");
-
   return fetchRequestHandler({
     endpoint: "/api/trpc",
     req,

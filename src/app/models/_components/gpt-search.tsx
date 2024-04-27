@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
+import { useModelNodesContext } from "~/app/_context/model-context";
 import { Button } from "~/components/ui/button";
+import { api } from "~/trpc/react";
 
 interface SearchResult {
   // Define your search result interface here based on your API response
@@ -8,60 +10,128 @@ interface SearchResult {
   result: string;
 }
 
-const GptSearchPage: React.FC = ({ keys }) => {
+const GptSearchPage: React.FC = ({}) => {
   const [query, setQuery] = useState<string>("");
   const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
-
-  const options = {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      accept: "text/plain",
-      "x-api-key": keys[0],
-      "x-openai-key": keys[1],
-      "x-user-id": "UniqueUserIdentifier",
-      "content-type": "application/json",
+  const fetchProperties = api.propertySearch.search.useMutation();
+  const nodes = {
+    nodes: [
+      {
+        id: "0",
+        type: "blockComp",
+        data: [
+          {
+            id: "vy4wuo965iq",
+            section: "Property Details",
+            value: "deckArea",
+            label: "Deck Area",
+            format: "size",
+            input: 0,
+            operator: "",
+            visible: true,
+          },
+          {
+            id: "ej2pk6l6lsj",
+            section: "Property Details",
+            value: "deckArea",
+            label: "Deck Area",
+            format: "size",
+            input: 0,
+            operator: "",
+            visible: true,
+          },
+          {
+            id: "1yx5rx7c9wfh",
+            section: "Property Details",
+            value: "squareFeet",
+            label: "Square Feet",
+            format: "size",
+            input: 0,
+            operator: "",
+            visible: true,
+          },
+          {
+            id: "09ushjuob9px",
+            section: "Property Details",
+            value: "unitsCount",
+            label: "Unit Count",
+            format: "number",
+            input: 0,
+            operator: "",
+            visible: true,
+          },
+        ],
+        dragHandle: ".custom-drag-handle",
+        style: {
+          border: "2px solid #ddd",
+          background: "white",
+          borderRadius: "8px",
+        },
+        position: { x: 0, y: 0 },
+        width: 276,
+        height: 196,
+      },
+      {
+        id: "1",
+        type: "blockComp",
+        dragHandle: ".custom-drag-handle",
+        position: { x: 311.5153248642067, y: 108.71122718380283 },
+        style: {
+          border: "2px solid #ddd",
+          background: "white",
+          borderRadius: "8px",
+        },
+        data: [
+          {
+            id: "3n36fktrp4y",
+            section: "Financial Valuation",
+            value: "assessedLandValue",
+            label: "Assessed Land Value",
+            format: "USD",
+            input: 0,
+            operator: "",
+            visible: true,
+          },
+          {
+            id: "raeiz6vfwu",
+            section: "Financial Valuation",
+            value: "priorSaleAmount",
+            label: "Prior Sale Amount",
+            format: "USD",
+            input: 0,
+            operator: "",
+            visible: true,
+          },
+          {
+            id: "qoa6conq1o",
+            section: "Financial Valuation",
+            value: "assessedValue",
+            label: "Assessed Value",
+            format: "USD",
+            input: 0,
+            operator: "",
+            visible: true,
+          },
+        ],
+        width: 276,
+        height: 196,
+      },
+    ],
+    edges: [{ id: "1", source: "0", target: "1" }],
+    viewport: {
+      x: -251.76669469951742,
+      y: -24.53523350178338,
+      zoom: 1.3571296849803665,
     },
-    body: JSON.stringify({
-      size: 25,
-      query: query,
-    }),
   };
 
-  // Fetching Data Here
-  const handleSubmit = async () => {
-    fetch("https://api.realestateapi.com/v2/PropGPT", options)
-      .then((response) => response.json())
-      .then((response) => {
-        /* Do something with the response */
-        findPropertyMatches(response, nodeData);
-      })
-      .catch((err) => console.error(err));
-  };
-
-  // This function will find matching parameters in both json objects and populate the matches
-  // list with the key and the value (response: ApiResponse, nodeData: The model's node data returned by our database)
-  function findPropertyMatches(response, nodeData) {
-    // Extract key names and values from the first JSON object
-    const keyValues = response.data[0];
-
-    // Initialize an array to store matches with values
-    const matches = [];
-
-    // Iterate over the 'data' array in the second JSON object
-    nodeData.nodes.forEach((node) => {
-      node.data.forEach((dataItem) => {
-        // Check if the 'value' key exists
-        if (dataItem.hasOwnProperty("value")) {
-          // Check if the value matches any key names from the first JSON object
-          const keyName = dataItem.value;
-          if (keyValues.hasOwnProperty(keyName)) {
-            matches.push({ key: keyName, value: keyValues[keyName] });
-          }
-        }
-      });
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    const result = fetchProperties.mutate({
+      nodes: JSON.stringify(nodes),
+      userInput: query,
     });
-  }
+    console.log(result);
+  };
 
   return (
     <div className="flex h-screen flex-col items-center justify-center">
@@ -89,9 +159,7 @@ const GptSearchPage: React.FC = ({ keys }) => {
             required
           />
         </div>
-        <Button type="button" onClick={handleSubmit}>
-          Submit
-        </Button>
+        <Button type="submit">Submit</Button>
       </form>
       {searchResult && (
         <div className="mt-8">
