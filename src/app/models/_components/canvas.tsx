@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactFlow, {
   Controls,
   Background,
@@ -14,6 +14,7 @@ import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import { toast } from "sonner";
 export default function Canvas({ modelId }: { modelId: string }) {
+  const savedModel = api.models.get.useQuery({ modelId });
   const { setViewport } = useReactFlow();
   const ReactFlowWrapper = useRef(null);
   const updateModel = api.models.update.useMutation({
@@ -32,6 +33,8 @@ export default function Canvas({ modelId }: { modelId: string }) {
     onConnectStart,
     setEdges,
     setNodes,
+    rfInstance,
+    setRfInstance,
   } = useModelNodesContext();
 
   const nodeTypes: NodeTypes = useMemo(
@@ -39,22 +42,38 @@ export default function Canvas({ modelId }: { modelId: string }) {
     [],
   );
 
+  useEffect(() => {
+    if (savedModel.data !== undefined) {
+      const flow = JSON.parse(savedModel.data.data);
+      if (flow !== null) {
+        if (flow.edges !== null) {
+          const { x = 0, y = 0, zoom = 1 } = flow.viewport;
+          setNodes(flow.nodes || []);
+          setEdges(flow.edges || []);
+          setViewport({ x, y, zoom });
+        }
+      }
+    }
+  }, [savedModel.data]);
+
   const handleSave = useCallback(() => {
     toast.loading("Saving...");
-    if (nodes) {
-      const flow = nodes.toObject();
-      localStorage.setItem("model-flow", JSON.stringify(flow));
+
+    if (rfInstance) {
+      const flow = rfInstance.toObject();
+      console.log(flow);
+      const toObjectRf = { nodes, edges, viewport: flow.viewport };
+      console.log(toObjectRf);
+      updateModel.mutate({
+        modelId: modelId,
+        modelObject: JSON.stringify(toObjectRf),
+      });
     }
-    updateModel.mutate({
-      modelId: modelId,
-      modelObject: JSON.stringify({ nodes }),
-    });
-  }, [nodes]);
+  }, [modelId, rfInstance, updateModel]);
 
   const onRestore = useCallback(() => {
     const restoreFlow = () => {
-      const flow = JSON.parse(localStorage.getItem("model-flow"));
-
+      const flow = JSON.parse(savedModel.data.data);
       if (flow) {
         const { x = 0, y = 0, zoom = 1 } = flow.viewport;
         setNodes(flow.nodes || []);
@@ -77,7 +96,7 @@ export default function Canvas({ modelId }: { modelId: string }) {
         onConnect={onConnect}
         onConnectEnd={onConnectEnd}
         fitView
-        // onInit={setNodes}
+        onInit={setRfInstance}
         nodeTypes={nodeTypes}
       >
         <Panel position="top-right">
@@ -90,3 +109,4 @@ export default function Canvas({ modelId }: { modelId: string }) {
     </div>
   );
 }
+

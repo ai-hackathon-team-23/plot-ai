@@ -8,12 +8,12 @@ import {
 
 export const modelsRouter = createTRPCRouter({
   get: protectedProcedure
-    .input(z.object({ userId: z.string(), modelId: z.string() }))
+    .input(z.object({ modelId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const { userId, modelId } = input;
+      const { modelId } = input;
 
       const model = await ctx.db.models.findFirst({
-        where: { id: modelId, userId: userId || ctx.session.user.id },
+        where: { id: modelId, userId: ctx.session.user.id },
       });
 
       if (!model) {

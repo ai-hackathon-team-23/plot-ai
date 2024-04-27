@@ -38,6 +38,8 @@ interface ContextProps {
   blockId: string;
   focus: unknown
   setFocus: Dispatch<SetStateAction<undefined>>
+  rfInstance: unknown
+  setRfInstance: Dispatch<SetStateAction<null>>
 }
 
 let id = 0;
@@ -71,7 +73,9 @@ const ModelNodesContext = createContext<ContextProps>({
   onConnectStart: () => null,
   blockId: "",
   focus: null,
-  setFocus: () => null
+  setFocus: () => null,
+  rfInstance: null,
+  setRfInstance: () => null
 });
 const ModelNodesContextProvider = ({
   children,
@@ -79,6 +83,7 @@ const ModelNodesContextProvider = ({
   const [focus, setFocus] = useState()
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [rfInstance, setRfInstance] = useState(null);
   const connectingNodeId = useRef(null);
   const { screenToFlowPosition } = useReactFlow();
 
@@ -129,7 +134,6 @@ const ModelNodesContextProvider = ({
     },
     [screenToFlowPosition],
   );
-  
   return (
     <ModelNodesContext.Provider
       value={{
@@ -144,7 +148,9 @@ const ModelNodesContextProvider = ({
         onConnectStart,
         blockId: id.toString(),
         focus,
-        setFocus
+        setFocus,
+        rfInstance,
+        setRfInstance
       }}
     >
       {children}
