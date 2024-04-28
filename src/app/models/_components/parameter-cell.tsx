@@ -11,14 +11,14 @@ interface Param {
   visible: boolean;
 }
 
-export function ParameterCell({ id, section, value, label, input, operator, visible }: Param) {
+export function ParameterCell({ id, section, value, label, format, input, operator, visible }: Param) {
 
     return (
         <>
-          <div className="flex-1 pr-2">{label}</div>
+          <div className="flex-1 px-2">{label}</div>
           {input !== 0 && ( 
-             <div className="flex-1 p-2 text-right">
-              {input}
+             <div className="flex-1 px-2 text-right">
+              {format === "USD" ? `$${input}` : format === "percent" ? `${input}%` : input}
             </div>
           )}
         </>
