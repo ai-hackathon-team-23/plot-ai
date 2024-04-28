@@ -50,7 +50,7 @@ const ModelCreatorView = ({ params }: Props) => {
   return (
     <Provider theme={defaultTheme} colorScheme="light">
       <ReactFlowProvider>
-        <ModelNodesContextProvider>
+        <ModelNodesContextProvider modelId={modelId}>
           <div className="flex items-center justify-center align-middle">
             <div className="grid grid-flow-col grid-rows-3">
               <div className="justify-left row-span-3 pr-1">

@@ -21,6 +21,7 @@ export interface ModelListParams {
   input: number;
   operator: string;
   visible: boolean;
+  nodeId: string;
 }
 
 export interface DndListViewProps extends DragAndDropOptions {

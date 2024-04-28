@@ -44,12 +44,14 @@ export default function Canvas({ modelId }: { modelId: string }) {
 
   useEffect(() => {
     if (savedModel.data !== undefined) {
-      const flow = JSON.parse(savedModel.data.data);
-      if (flow !== null) {
-        if (flow.edges !== null) {
-          const { x = 0, y = 0, zoom = 1 } = flow.viewport;
-          setNodes(flow.nodes || []);
-          setEdges(flow.edges || []);
+      // console.log("RETRIEVED DATA:", JSON.parse(savedModel.data.data));
+      const flowData = JSON.parse(savedModel.data.data);
+      if (flowData !== null) {
+        if (flowData.edges !== null) {
+          const { x, y, zoom } = flowData.viewport;
+          console.log(flowData.nodes);
+          setNodes(JSON.parse(savedModel.data.data).nodes);
+          setEdges(flowData.edges || []);
           setViewport({ x, y, zoom });
         }
       }
@@ -61,9 +63,8 @@ export default function Canvas({ modelId }: { modelId: string }) {
 
     if (rfInstance) {
       const flow = rfInstance.toObject();
-      console.log(flow);
       const toObjectRf = { nodes, edges, viewport: flow.viewport };
-      console.log(toObjectRf);
+      console.log("SAVED DATA", toObjectRf);
       updateModel.mutate({
         modelId: modelId,
         modelObject: JSON.stringify(toObjectRf),
@@ -109,4 +110,3 @@ export default function Canvas({ modelId }: { modelId: string }) {
     </div>
   );
 }
-
