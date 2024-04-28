@@ -1,18 +1,16 @@
-"use client";
+// @ts-nocheck
 import React, { useState } from "react";
 import { useModelNodesContext } from "~/app/_context/model-context";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 
-interface SearchResult {
-  // Define your search result interface here based on your API response
-  // For demonstration purposes, let's assume it's just a string
-  result: string;
+interface GptSearchPageProps {
+  onResults: (results: JSON) => JSON;
 }
 
-const GptSearchPage: React.FC = ({}) => {
+const GptSearchPage: React.FC<GptSearchPageProps> = ({ onResults }) => {
   const [query, setQuery] = useState<string>("");
-  const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
+  const [searchResult, setSearchResult] = useState<string | null>(null);
   const fetchProperties = api.propertySearch.search.useMutation();
   const nodes = {
     nodes: [
@@ -131,6 +129,7 @@ const GptSearchPage: React.FC = ({}) => {
       userInput: query,
     });
     console.log(result);
+    onResults(result);
   };
 
   return (
@@ -172,3 +171,4 @@ const GptSearchPage: React.FC = ({}) => {
 };
 
 export default GptSearchPage;
+

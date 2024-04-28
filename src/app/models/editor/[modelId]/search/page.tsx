@@ -1,14 +1,42 @@
-import React from "react";
+// @ts-nocheck
+"use client"
+import React, { useState } from "react";
 import GptSearchPage from "~/app/models/_components/gpt-search";
 import PropertyCard from "~/app/models/_components/property-card";
 
-function page() {
+
+
+function Page() {
+  const [propertyData, setPropertyData] = useState([]);
+
+  function onResultUpdate(data) {
+    // The data returned will be an array of key value pairs ex: ["assessedValue": "10000"]
+    /* We could possibly format the returned data to be: 
+    
+    ["address": "example address",
+     "price": "10000000",
+     "propDetails": {[]}] 
+
+     Then use a map to unravel the data to the PropertyCard component and populate it with whatever params we need
+    
+    */
+    setPropertyData(data);
+  };
+
   return (
     <div>
-      <PropertyCard address={"630 N. Trayer Ave Glendora, CA 91741"} propDetails={["param", "param"]} price={"10000"} imageUrl={"https://images.unsplash.com/photo-1448630360428-65456885c650?q=80&w=2067&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"}></PropertyCard>
-      <GptSearchPage></GptSearchPage>
+      {propertyData.map((property, index) => (
+        <PropertyCard
+          key={index}
+          address={property.address}
+          propDetails={property.propDetails}
+          price={property.price}
+          imageUrl={property.imageUrl}
+        />
+      ))}
+      <GptSearchPage onResults={onResultUpdate}></GptSearchPage>
     </div>
   );
 }
 
-export default page;
+export default Page;

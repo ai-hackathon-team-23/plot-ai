@@ -10,7 +10,7 @@ export const propertySearchRouter = createTRPCRouter({
     .input(z.object({ nodes: z.string(), userInput: z.string() }))
     .mutation(async ({ input }) => {
       const nodeData = JSON.parse(input.nodes);
-      console.log("DATA==========", nodeData);
+      console.log("DATA==========", input.userInput);
       const options: RequestInit = {
         method: "POST",
         headers: {
