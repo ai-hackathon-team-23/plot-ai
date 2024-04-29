@@ -2,20 +2,22 @@
 
 import React, { memo, useState } from "react";
 import DroppableListView from "./droppable-list-view";
-import { Handle, Position } from "reactflow";
+import { Handle, Position, useNodeId } from "reactflow";
 import { useModelNodesContext } from "~/app/_context/model-context";
 
 const onConnect = (params) => console.log("handle onConnect", params);
 
 const BlockComponent = () => {
-  const {  nodes } = useModelNodesContext();
+  const { nodes } = useModelNodesContext();
+  const nodeId = useNodeId();
+
   return (
     <div className="relative">
 
       <Handle type="target" position={Position.Left} onConnect={onConnect} />
       <div className="relative">
         <div className="">
-          <DroppableListView  nodes={nodes} />
+          <DroppableListView  nodes={nodes} blockId={nodeId}/>
         </div>
       </div>
       <Handle type="source" position={Position.Right} />

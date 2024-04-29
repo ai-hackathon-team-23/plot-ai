@@ -44,12 +44,12 @@ export default function Canvas({ modelId }: { modelId: string }) {
 
   useEffect(() => {
     if (savedModel.data !== undefined) {
-      // console.log("RETRIEVED DATA:", JSON.parse(savedModel.data.data));
+      console.log("RETRIEVED DATA:", JSON.parse(savedModel.data.data));
       const flowData = JSON.parse(savedModel.data.data);
       if (flowData !== null) {
         if (flowData.edges !== null) {
           const { x, y, zoom } = flowData.viewport;
-          console.log(flowData.nodes);
+          // console.log(JSON.parse(savedModel.data.data).nodes);
           setNodes(JSON.parse(savedModel.data.data).nodes);
           setEdges(flowData.edges || []);
           setViewport({ x, y, zoom });

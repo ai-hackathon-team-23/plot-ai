@@ -120,7 +120,7 @@ const ModelNodesContextProvider = ({ children, modelId }: ProviderProps) => {
 
       if (targetIsPane) {
         console.log("Creating new node");
-        const id = `${blockId.current}`;
+        const id = `${++blockId.current}`;
 
         const newNode = {
           id: id,

@@ -19,57 +19,54 @@ import { type ModelListParams } from "./draggable-list-view";
 
 interface DndListViewProps extends DragAndDropOptions {
   nodes: Node<ModelListParams>[];
+  blockId: string;
 }
 
 export default function DroppableListView(props: DndListViewProps) {
-  const { ...otherProps } = props;
-  const { setNodes, nodes, blockId } = useModelNodesContext();
-  const [currId, setCurrId] = useState(blockId.current);
+  const { blockId, ...otherProps } = props;
+  const { setNodes, nodes } = useModelNodesContext();
   const [initRender, setInitRender] = useState(false);
   const list = useListData({
     initialItems: [],
   });
 
-  useEffect(() => {
-    // console.log("BLOCK ID \n", blockId.current);
-    setCurrId(blockId.current);
-    blockId.current++;
-
-    return () => {
-      blockId.current--;
-    };
-  }, []);
-
   // MOVING STATE FROM REACT-SPECTRUM LIST STATEMANAGEMNET TO REACT-FLOW GLOABAL STATE MANAGEMENT
   useEffect(() => {
-    if (nodes[currId] && list.items.length > 0) {
+    if (nodes[blockId] && list.items.length > 0) {
       setNodes((oldNodes) => {
-        // console.log(`NODE ${currId} DATA`, nodes[currId]);
-        oldNodes[currId].data = [...list.items];
+        // console.log(`NODE ${blockId} DATA`, nodes[blockId]);
+        oldNodes[blockId].data = [...list.items];
         return oldNodes;
       });
     }
-  }, [currId, list, setNodes]);
+  }, [blockId, list, setNodes]);
 
-  // MOVING STATE FROM REACT-FLOW GLOABAL LIST STATEMANAGEMNET TO REACT-SPECTRUM STATE MANAGEMENT
   useEffect(() => {
-    if (nodes[currId] && initRender == false) {
-      if (nodes[currId].data !== undefined) {
-        const nodeList = [...nodes[currId].data];
-        // console.log(nodeList)
-        // console.log("NODELIST ", currId, nodeList);
-        if (nodeList.length > 0) {
-          console.log("NODE LIST \n", nodeList);
-          for (let i = nodeList.length; i >= 0; i--) {
-            list.append(nodeList[i]);
-          }
-          // list.items = nodes[currId].data;
-          // console.log(`${currId}`,list.items)
-          setInitRender(true);
-        }
-      }
+    if (nodes[blockId] && initRender == false) {
+      console.log(blockId, nodes[blockId].data)
+      nodes[blockId].data.forEach((item) => list.append(item));
+      setInitRender(true);
     }
-  }, [currId, nodes]);
+  }, [nodes]);
+
+  // useEffect(() => {
+  //   if (nodes[blockId] && initRender == false) {
+  //     if (nodes[blockId].data !== undefined) {
+  //       const nodeList = [...nodes[blockId].data];
+  //       // console.log(nodeList)
+  //       // console.log("NODELIST ", blockId, nodeList);
+  //       if (nodeList.length > 0) {
+  //         console.log("NODE LIST \n", nodeList);
+  //         for (let i = nodeList.length; i >= 0; i--) {
+  //           list.append(nodeList[i]);
+  //         }
+  //         // list.items = nodes[blockId].data;
+  //         // console.log(`${blockId}`,list.items)
+  //         setInitRender(true);
+  //       }
+  //     }
+  //   }
+  // }, [blockId, nodes]);
 
   const { dragAndDropHooks } = useDragAndDrop({
     // Only accept items with the following drag type
@@ -100,7 +97,7 @@ export default function DroppableListView(props: DndListViewProps) {
             ),
           ),
           id: Math.random().toString(36).slice(2),
-          blockId: currId,
+          blockId: blockId,
         })),
       );
 
@@ -131,7 +128,7 @@ export default function DroppableListView(props: DndListViewProps) {
             ),
           ),
           id: Math.random().toString(36).slice(2),
-          blockId: currId,
+          blockId: blockId,
         })),
       );
       list.append(...processedItems);
