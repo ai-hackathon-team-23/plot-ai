@@ -5,7 +5,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -16,18 +15,21 @@ interface DropdownProps extends React.ComponentProps<typeof SelectTrigger> {
   placeholder: string;
   items: { value: string; label: string }[];
   onValueChange: string;
+  value: string
 }
 
 export function DropdownSelect({
   size,
   placeholder,
+  label,
   items,
   className,
   onValueChange,
+  value,
   ...props
 }: DropdownProps) {
   return (
-    <Select onValueChange={onValueChange}>
+    <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger className={cn(size, className)} {...props}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

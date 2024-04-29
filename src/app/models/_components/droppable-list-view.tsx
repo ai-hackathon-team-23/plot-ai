@@ -33,7 +33,7 @@ interface DndListViewProps extends DragAndDropOptions {
 
 export default function DroppableListView(props: DndListViewProps) {
   const { list, blockId, ...otherProps } = props;
-  const { setNodes, setFocus } = useModelNodesContext();
+  const { setNodes, setFocus, updatedItem } = useModelNodesContext();
   const [currId, setCurrId] = useState(+blockId);
 
   useEffect(() => {
@@ -46,6 +46,13 @@ export default function DroppableListView(props: DndListViewProps) {
       return oldNodes;
     });
   }, [currId, list, setNodes]);
+
+  useEffect(() => {
+    if (updatedItem) {
+      list.update(updatedItem.id, updatedItem);
+    }
+  }, [updatedItem]); 
+  
 
   const { dragAndDropHooks } = useDragAndDrop({
     // Only accept items with the following drag type

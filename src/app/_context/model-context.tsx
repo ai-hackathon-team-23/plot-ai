@@ -38,6 +38,8 @@ interface ContextProps {
   blockId: string;
   focus: unknown;
   setFocus: Dispatch<SetStateAction<undefined>>;
+  updatedItem: unknown;
+  setUpdatedItem: Dispatch<SetStateAction<undefined>>;
 }
 
 let id = 0;
@@ -72,11 +74,14 @@ const ModelNodesContext = createContext<ContextProps>({
   blockId: "",
   focus: null,
   setFocus: () => null,
+  updatedItem: null,
+  setUpdatedItem: () => null,
 });
 const ModelNodesContextProvider = ({
   children,
 }: HTMLAttributes<HTMLDivElement>) => {
   const [focus, setFocus] = useState();
+  const [updatedItem, setUpdatedItem] = useState();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const connectingNodeId = useRef(null);
@@ -145,6 +150,8 @@ const ModelNodesContextProvider = ({
         blockId: id.toString(),
         focus,
         setFocus,
+        updatedItem,
+        setUpdatedItem,
       }}
     >
       {children}

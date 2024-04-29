@@ -9,23 +9,14 @@ import { useEffect, useState } from "react";
 import { Input } from "~/components/ui/input";
 import { useModelNodesContext } from "~/app/_context/model-context";
 import { createDynamicallyTrackedSearchParams } from "next/dist/client/components/search-params";
+import { get } from "node:https";
 
 export function EditBar({}) {
-  const {focus} = useModelNodesContext()
+  const {focus, setFocus, setUpdatedItem} = useModelNodesContext()
 
-  const [blockTitle, setBlockTitle] = useState("");
-  const [blockAction, setBlockAction] = useState("");
   const [cellValue, setCellValue] = useState("");
   const [cellOperator, setCellOperator] = useState("");
   const [cellVisible, setCellVisible] = useState(true);
-
-  const handleBlockActionChange = (value: string) => {
-    setBlockAction(value);
-  };
-
-  const handleCellValueChange = (value: string) => {
-    setCellValue(value);
-  };
 
   const handleOperatorChange = (value: string) => {
     setCellOperator(value);
@@ -36,38 +27,39 @@ export function EditBar({}) {
   };
 
   useEffect(() => {
-    console.log(focus);
-    const id = focus.id
+    if(focus) {
+      setCellVisible(focus.visible);
+      setCellValue(focus.input);
+      setCellOperator(focus.operator);
+    }
 
-    // TO DO: 
-    // Using the useEffect, everytime a new cell is clicked 
-    // update the id and maintain the new values for 
-    // cellValue, cellOperator, cellVisible if they were changed 
-    // Using this we can resave the data using droppable-list-view.txt line 43
+  }, [focus])
 
-  }, [focus, cellValue, cellOperator, cellVisible]);
+
+  useEffect(() => {
+    if (focus) {
+      const newItem = {
+        id: focus.id,
+        section: focus.section,
+        value: focus.value,
+        label: focus.label,
+        format: focus.format,
+        input:  cellValue,
+        operator: cellOperator,
+        visible: cellVisible,
+      }
+      setUpdatedItem(newItem);
+    }
+
+  }, [cellValue, cellOperator, cellVisible]);
+
+  function getLabelForValue(value : string) {
+    const operation = OPERATIONS.find(op => op.value === value);
+    return operation ? operation.label : "Operation";
+  }
 
   return (
     <>
-      <div className="width-4 grid grid-cols-10 items-center justify-center border">
-        <div className="col-span-8">
-          {/* {Block Title Here} */}
-          <span className="inline-block pl-4 align-middle font-bold">
-            {"Block Title"}
-          </span>
-        </div>
-        <div className="col-span-2 flex justify-end">
-          <span className="">
-            <DropdownSelect
-              size={"w-[200px]"}
-              placeholder={"Edit"}
-              items={EDIT_OPTIONS}
-              className="rounded-none border-0 border-l shadow-none"
-              onValueChange={handleBlockActionChange}
-            />
-          </span>
-        </div>
-      </div>
       <div className="grid grid-cols-10 items-center justify-center border-b border-l">
         <div className="col-span-2 border-r">
           <span className="inline-block pl-4 align-middle font-bold">
@@ -80,6 +72,7 @@ export function EditBar({}) {
               type="number"
               placeholder="Cell Value"
               className="w-full border-0 focus-visible:ring-0"
+              value={cellValue}
               onChange={e => setCellValue(e.target.value)}
             />
           </span>
@@ -88,15 +81,17 @@ export function EditBar({}) {
           <span className="pl-1">
             <DropdownSelect
               size={"w-[165px]"}
-              placeholder={"Operation"}
+              placeholder="Operation"
               items={OPERATIONS}
-              className="rounded-none border-0 border-x shadow-none"
-              onValueChange={handleOperatorChange}
+              value={cellOperator}
+              className="rounded-none border-0 border-x shadow-none" 
+              onValueChange={setCellOperator}
             />
           </span>
           <span className="border-r pl-3 pr-2 pt-2">
             <Checkbox
               checked={cellVisible}
+              value={cellVisible}
               onCheckedChange={handleSetVisible}
               className={"border border-dashed"}
             />
