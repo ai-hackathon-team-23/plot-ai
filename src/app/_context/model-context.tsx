@@ -48,7 +48,7 @@ const initialNodes: Node<ModelListParams>[] = [
   {
     id: id.toString(),
     type: "blockComp",
-    data: {},
+    data: [] as never,
     // Specify the custom class acting as a drag handle
     dragHandle: ".custom-drag-handle",
 
@@ -83,7 +83,7 @@ const ModelNodesContextProvider = ({
   const [focus, setFocus] = useState();
   const [updatedItem, setUpdatedItem] = useState();
   const blockId = useRef(0);
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const connectingNodeId = useRef(null);
   const { screenToFlowPosition } = useReactFlow();
