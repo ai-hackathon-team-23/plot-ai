@@ -72,6 +72,7 @@ model Models {
     nodes       Json?
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
+    Block       Block[]
 }
 
 enum Formats {
@@ -102,6 +103,17 @@ model ModelParameters {
     functionality            Json?
     category                 Categories
     modelParameterCategoryId String
+}
+
+model Block {
+    id        String   @id @default(cuid())
+    type      String
+    data      Json
+    position  Json
+    model     Models   @relation(fields: [modelsId], references: [id])
+    modelsId  String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {

@@ -7,7 +7,7 @@ import type {
   DropItem,
   TextDropItem,
 } from "@adobe/react-spectrum";
-import { ActionMenu, useDragAndDrop } from "@adobe/react-spectrum";
+import { ActionMenu, useDragAndDrop, useListData } from "@adobe/react-spectrum";
 import type { ListData } from "@adobe/react-spectrum";
 import { ListView, Item, Text } from "@adobe/react-spectrum";
 import { ParameterCell } from "./parameter-cell";
@@ -32,26 +32,55 @@ interface Param {
 }
 
 interface DndListViewProps extends DragAndDropOptions {
-  list: ListData<Param>;
+  nodes: Node<ModelListParams>[];
   blockId: string;
 }
 
 export default function DroppableListView(props: DndListViewProps) {
-  const { list, blockId, ...otherProps } = props;
-  const { setNodes } = useModelNodesContext();
-  const [currId, setCurrId] = useState(+blockId);
+  const { blockId, ...otherProps } = props;
+  const { setNodes, nodes } = useModelNodesContext();
+  const [initRender, setInitRender] = useState(false);
+  const list = useListData({
+    initialItems: [],
+  });
+
+  // MOVING STATE FROM REACT-SPECTRUM LIST STATEMANAGEMNET TO REACT-FLOW GLOABAL STATE MANAGEMENT
+  useEffect(() => {
+    if (nodes[blockId] && list.items.length > 0) {
+      setNodes((oldNodes) => {
+        // console.log(`NODE ${blockId} DATA`, nodes[blockId]);
+        oldNodes[blockId].data = [...list.items];
+        return oldNodes;
+      });
+    }
+  }, [blockId, list, setNodes]);
 
   useEffect(() => {
-    setCurrId(+blockId);
-    console.log("rendered:", +blockId);
-  }, []);
+    if (nodes[blockId] && initRender == false) {
+      console.log(blockId, nodes[blockId].data)
+      nodes[blockId].data.forEach((item) => list.append(item));
+      setInitRender(true);
+    }
+  }, [nodes]);
 
-  useEffect(() => {
-    setNodes((oldNodes) => {
-      oldNodes[currId].data = list.items;
-      return oldNodes;
-    });
-  }, [currId, list, setNodes]);
+  // useEffect(() => {
+  //   if (nodes[blockId] && initRender == false) {
+  //     if (nodes[blockId].data !== undefined) {
+  //       const nodeList = [...nodes[blockId].data];
+  //       // console.log(nodeList)
+  //       // console.log("NODELIST ", blockId, nodeList);
+  //       if (nodeList.length > 0) {
+  //         console.log("NODE LIST \n", nodeList);
+  //         for (let i = nodeList.length; i >= 0; i--) {
+  //           list.append(nodeList[i]);
+  //         }
+  //         // list.items = nodes[blockId].data;
+  //         // console.log(`${blockId}`,list.items)
+  //         setInitRender(true);
+  //       }
+  //     }
+  //   }
+  // }, [blockId, nodes]);
 
   const { dragAndDropHooks } = useDragAndDrop({
     // Only accept items with the following drag type
@@ -82,6 +111,7 @@ export default function DroppableListView(props: DndListViewProps) {
             ),
           ),
           id: Math.random().toString(36).slice(2),
+          blockId: blockId,
         })),
       );
 
@@ -112,6 +142,7 @@ export default function DroppableListView(props: DndListViewProps) {
             ),
           ),
           id: Math.random().toString(36).slice(2),
+          blockId: blockId,
         })),
       );
       list.append(...processedItems);
@@ -124,7 +155,7 @@ export default function DroppableListView(props: DndListViewProps) {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-1">
       <ListView
         aria-label="Droppable ListView in drag into list example"
         selectionMode="single"

@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
   useEffect,
+  MutableRefObject,
 } from "react";
 import type { ModelListParams } from "../models/_components/draggable-list-view";
 import {
@@ -20,6 +21,7 @@ import {
   type EdgeChange,
   useReactFlow,
 } from "reactflow";
+import { type ListData, useListData } from "@adobe/react-spectrum";
 
 type OnChange<ChangesType> = (changes: ChangesType[]) => void;
 
@@ -35,7 +37,11 @@ interface ContextProps {
   onConnect: (params: unknown) => void;
   onConnectStart: (_: unknown, { nodeId }: { nodeId: unknown }) => void;
   onConnectEnd: (event: unknown) => void;
-  blockId: string;
+  blockId: MutableRefObject<number>;
+  focus: unknown;
+  setFocus: Dispatch<SetStateAction<undefined>>;
+  rfInstance: unknown;
+  setRfInstance: Dispatch<SetStateAction<null>>;
 }
 
 let id = 0;
@@ -44,7 +50,7 @@ const initialNodes: Node<ModelListParams>[] = [
   {
     id: id.toString(),
     type: "blockComp",
-    data: {},
+    data: [] as never,
     // Specify the custom class acting as a drag handle
     dragHandle: ".custom-drag-handle",
 
@@ -57,6 +63,10 @@ const initialNodes: Node<ModelListParams>[] = [
   },
 ];
 
+interface ProviderProps extends HTMLAttributes<HTMLDivElement> {
+  modelId: string;
+}
+
 const ModelNodesContext = createContext<ContextProps>({
   nodes: initialNodes,
   setNodes: () => null,
@@ -67,13 +77,30 @@ const ModelNodesContext = createContext<ContextProps>({
   onConnect: () => null,
   onConnectEnd: () => null,
   onConnectStart: () => null,
-  blockId: "",
+  blockId: { current: 0 },
+  focus: null,
+  setFocus: () => null,
+  rfInstance: null,
+  setRfInstance: () => null,
 });
-const ModelNodesContextProvider = ({
-  children,
-}: HTMLAttributes<HTMLDivElement>) => {
+
+interface Param {
+  id: string;
+  section: string;
+  value: string;
+  label: string;
+  format: string;
+  input: number;
+  operator: string;
+  visible: boolean;
+}
+
+const ModelNodesContextProvider = ({ children, modelId }: ProviderProps) => {
+  const [focus, setFocus] = useState();
+  const blockId = useRef(0);
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [rfInstance, setRfInstance] = useState(null);
   const connectingNodeId = useRef(null);
   const { screenToFlowPosition } = useReactFlow();
 
@@ -93,7 +120,7 @@ const ModelNodesContextProvider = ({
 
       if (targetIsPane) {
         console.log("Creating new node");
-        const id = getId();
+        const id = `${++blockId.current}`;
 
         const newNode = {
           id: id,
@@ -124,8 +151,6 @@ const ModelNodesContextProvider = ({
     },
     [screenToFlowPosition],
   );
-
-
   return (
     <ModelNodesContext.Provider
       value={{
@@ -138,7 +163,11 @@ const ModelNodesContextProvider = ({
         onConnect,
         onConnectEnd,
         onConnectStart,
-        blockId: id.toString(),
+        blockId: blockId,
+        focus,
+        setFocus,
+        rfInstance,
+        setRfInstance,
       }}
     >
       {children}

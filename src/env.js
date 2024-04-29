@@ -31,8 +31,9 @@ export const env = createEnv({
    * Specify your client-side environment variables schema here. This way you can ensure the app
    * isn't built with invalid env vars. To expose them to the client, prefix them with
    * `NEXT_PUBLIC_`.
-   */
+  */
   client: {
+    // NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string()
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
   },
 
@@ -47,6 +48,7 @@ export const env = createEnv({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
+    // NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

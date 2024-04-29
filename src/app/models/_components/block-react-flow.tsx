@@ -2,8 +2,7 @@
 
 import React, { memo, useEffect, useState } from "react";
 import DroppableListView from "./droppable-list-view";
-import { Handle, Position } from "reactflow";
-import { useListData } from "@adobe/react-spectrum";
+import { Handle, Position, useNodeId } from "reactflow";
 import { useModelNodesContext } from "~/app/_context/model-context";
 import { Input } from "~/components/ui/input";
 
@@ -11,11 +10,8 @@ const onConnect = (params) => console.log("handle onConnect", params);
 
 const BlockComponent = () => {
   const [total, setTotal] = useState(0);
-  const { blockId } = useModelNodesContext();
-  const targetList = useListData({
-    initialItems: [],
-  });
-
+  const { nodes } = useModelNodesContext();
+  const nodeId = useNodeId();
   useEffect(() => {
     const newTotal = targetList.items.reduce((acc, item) => acc + item.input, 0)
     setTotal(newTotal)
@@ -30,10 +26,9 @@ const BlockComponent = () => {
         <Input type="tytle" placeholder="Title" className="border-none"/>
       </div>
       <Handle type="target" position={Position.Left} onConnect={onConnect} />
-
       <div className="relative">
         <div className="">
-          <DroppableListView list={targetList} blockId={blockId} />
+          <DroppableListView  nodes={nodes} blockId={nodeId}/>
         </div>
             <div className="custom-drag-handle absolute top-0 bottom-0 left-0 w-3 bg-white custom-drag-handle"></div>
             <div className="custom-drag-handle absolute top-0 bottom-0 right-0 w-3 bg-white custom-drag-handle"></div>
