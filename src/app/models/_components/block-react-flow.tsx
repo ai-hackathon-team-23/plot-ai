@@ -12,12 +12,12 @@ const BlockComponent = () => {
   const [total, setTotal] = useState(0);
   const { nodes } = useModelNodesContext();
   const nodeId = useNodeId();
-  useEffect(() => {
-    const newTotal = targetList.items.reduce((acc, item) => acc + item.input, 0)
-    setTotal(newTotal)
-  }, [targetList.items])
+  // useEffect(() => {
+  //   const newTotal = targetList.items.reduce((acc, item) => acc + item.input, 0)
+  //   setTotal(newTotal)
+  // }, [targetList.items])
 
-  console.log(total)
+  // console.log(total)
 
 
   return (

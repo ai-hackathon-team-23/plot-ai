@@ -98,7 +98,7 @@ interface Param {
 const ModelNodesContextProvider = ({ children, modelId }: ProviderProps) => {
   const [focus, setFocus] = useState();
   const blockId = useRef(0);
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [rfInstance, setRfInstance] = useState(null);
   const connectingNodeId = useRef(null);
@@ -135,6 +135,7 @@ const ModelNodesContextProvider = ({ children, modelId }: ProviderProps) => {
             background: "white",
             borderRadius: "8px",
           },
+          data: [],
           // data: { label: nodes.at(connectingNodeId - 1)?.data.label },
           // origin: [0.5, 0.0],
         };

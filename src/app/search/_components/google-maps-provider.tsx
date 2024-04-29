@@ -1,27 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import {
   APIProvider,
-  AdvancedMarker,
-  InfoWindow,
   Map,
-  Pin,
-  useAdvancedMarkerRef,
 } from "@vis.gl/react-google-maps";
-import { env } from "~/env";
 import { propertyData } from "../_constants/property-response";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import {
-  Popover,
-  PopoverContent,
-  PopoverAnchor,
-  PopoverTrigger,
-} from "~/components/ui/popover";
-import { Button } from "~/components/ui/button";
 import Marker from "./marker";
 
 interface GoogleMapsProviderProps extends React.ComponentProps<typeof Map> {
@@ -36,7 +19,7 @@ const GoogleMapsProvider = ({ children }: GoogleMapsProviderProps) => {
       {children}
       <Map
         style={{ width: "100vw", height: "100vh" }}
-        defaultCenter={{ lat: 34.059761, lng: -118.276802 }}
+        defaultCenter={{ lat: data[0].latitude, lng: data[0]?.longitude }}
         defaultZoom={12}
         gestureHandling={"greedy"}
         disableDefaultUI={true}

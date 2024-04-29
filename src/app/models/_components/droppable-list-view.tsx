@@ -48,7 +48,6 @@ export default function DroppableListView(props: DndListViewProps) {
   useEffect(() => {
     if (nodes[blockId] && list.items.length > 0) {
       setNodes((oldNodes) => {
-        // console.log(`NODE ${blockId} DATA`, nodes[blockId]);
         oldNodes[blockId].data = [...list.items];
         return oldNodes;
       });
@@ -56,12 +55,23 @@ export default function DroppableListView(props: DndListViewProps) {
   }, [blockId, list, setNodes]);
 
   useEffect(() => {
-    if (nodes[blockId] && initRender == false) {
-      console.log(blockId, nodes[blockId].data)
-      nodes[blockId].data.forEach((item) => list.append(item));
+    if (initRender === false) {
+      // console.log(blockId, nodes[blockId].data)
+
+      nodes[blockId].data.forEach((item) => {
+        if (list.getItem(item.id) == undefined) {
+          console.log(`NODE ${blockId} DATA`, nodes[blockId].data);
+          list.append(item);
+        }
+      });
+      // list.items = nodes[blockId].data
       setInitRender(true);
     }
-  }, [nodes]);
+
+    return () => {
+      list.items.forEach((item) => list.remove(item.id));
+    };
+  }, []);
 
   // useEffect(() => {
   //   if (nodes[blockId] && initRender == false) {
