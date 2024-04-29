@@ -24,10 +24,11 @@ export function DropdownSelect({
   items,
   className,
   onValueChange,
+  value,
   ...props
 }: DropdownProps) {
   return (
-    <Select onValueChange={onValueChange}>
+    <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger className={cn(size, className)} {...props}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
