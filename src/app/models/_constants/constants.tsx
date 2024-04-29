@@ -196,8 +196,8 @@ export const PARAMS = [
     value: "bathrooms",
     label: "Bathrooms",
     format: "number",
-    input: 4,
-    operator: "addition",
+    input: 0,
+    operator: "",
     visible: true,
   },
   {
