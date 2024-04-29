@@ -1,9 +1,8 @@
-import Link from "next/link";
-
 import { CreatePost } from "~/app/_components/create-post";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import { Button } from "~/components/ui/button";
+import Link from "next/link";
 
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
@@ -13,14 +12,19 @@ export default async function Home() {
     <>
       <main className="flex min-h-screen flex-col items-center justify-center">
         <div className="flex flex-col justify-center pb-10">
-          <h1 className="text-4xl font-bold">Welcome to Plot.ai</h1>
+          <h1 className="text-4xl font-bold">Welcome to</h1>
+          <h1 className="text-8xl font-bold">plot-ai</h1>
         </div>
         <div className="flex items-center justify-center">
           <div className="pr-2">
-            <Button>Create a Model</Button>
+            <Link href="/models" passHref>
+              <Button>Create a Model</Button>
+            </Link>
           </div>
           <div>
-            <Button variant="outline">Start a Search</Button>
+            <Link href="/search" passHref>
+              <Button variant="outline">Start a Search</Button>
+            </Link>
           </div>
         </div>
       </main>

@@ -82,7 +82,8 @@ const ModelNodesContextProvider = ({
 }: HTMLAttributes<HTMLDivElement>) => {
   const [focus, setFocus] = useState();
   const [updatedItem, setUpdatedItem] = useState();
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const blockId = useRef(0);
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const connectingNodeId = useRef(null);
   const { screenToFlowPosition } = useReactFlow();
@@ -118,6 +119,7 @@ const ModelNodesContextProvider = ({
             background: "white",
             borderRadius: "8px",
           },
+          data: [],
           // data: { label: nodes.at(connectingNodeId - 1)?.data.label },
           // origin: [0.5, 0.0],
         };
