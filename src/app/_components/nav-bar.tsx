@@ -50,6 +50,7 @@ const NavBar = ({ session }: Props) => {
                     {session ? session.user.email : null}
                   </ListItem>
                   <ListItem href="/models" title="Models" />
+                  <ListItem href="/search" title="Search" />
                   <Separator />
                   <ListItem
                     href={session ? "/api/auth/signout" : "/api/auth/signin"}
