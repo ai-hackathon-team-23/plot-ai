@@ -38,7 +38,7 @@ interface DndListViewProps extends DragAndDropOptions {
 
 export default function DroppableListView(props: DndListViewProps) {
   const { blockId, ...otherProps } = props;
-  const { setNodes, nodes } = useModelNodesContext();
+  const { setNodes, nodes, updatedItem, setFocus} = useModelNodesContext();
   const [initRender, setInitRender] = useState(false);
   const list = useListData({
     initialItems: [],
@@ -72,6 +72,12 @@ export default function DroppableListView(props: DndListViewProps) {
       list.items.forEach((item) => list.remove(item.id));
     };
   }, []);
+
+  useEffect(() => {
+    if (updatedItem) {
+      list.update(updatedItem.id, updatedItem);
+    }
+  }, [updatedItem]); 
 
   // useEffect(() => {
   //   if (nodes[blockId] && initRender == false) {
@@ -194,16 +200,18 @@ export default function DroppableListView(props: DndListViewProps) {
                 ""
               )}
             </div>
-            <ParameterCell
-              id={item.id}
-              section={item.section}
-              value={item.value}
-              label={item.label}
-              format={item.format}
-              input={item.input}
-              operator={item.operator}
-              visible={item.visible}
-            />
+            <div onClick={() => {setFocus(item)}}>
+              <ParameterCell
+                id={item.id}
+                section={item.section}
+                value={item.value}
+                label={item.label}
+                format={item.format}
+                input={item.input}
+                operator={item.operator}
+                visible={item.visible}
+              />
+            </div>
           </Item>
         )}
       </ListView>
