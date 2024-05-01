@@ -16,28 +16,28 @@ type Props = {
 const ModelCreatorView = ({ params }: Props) => {
   const { modelId } = params;
 
-  const [blockTitle, setBlockTitle] = useState("");
-  const [blockAction, setBlockAction] = useState("");
-  const [cellTitle, setCellTitle] = useState("");
-  const [cellValue, setCellValue] = useState("");
-  const [cellOperator, setCellOperator] = useState("");
-  const [cellVisible, setCellVisible] = useState(true);
+  // const [blockTitle, setBlockTitle] = useState("");
+  // const [blockAction, setBlockAction] = useState("");
+  // const [cellTitle, setCellTitle] = useState("");
+  // const [cellValue, setCellValue] = useState("");
+  // const [cellOperator, setCellOperator] = useState("");
+  // const [cellVisible, setCellVisible] = useState(true);
 
-  const handleBlockActionChange = (value: string) => {
-    setBlockAction(value);
-  };
+  // const handleBlockActionChange = (value: string) => {
+  //   setBlockAction(value);
+  // };
 
-  const handleCellValueChange = (value: string) => {
-    setCellValue(value);
-  };
+  // const handleCellValueChange = (value: string) => {
+  //   setCellValue(value);
+  // };
 
-  const handleOperatorChange = (value: string) => {
-    setCellOperator(value);
-  };
+  // const handleOperatorChange = (value: string) => {
+  //   setCellOperator(value);
+  // };
 
-  const handleSetVisible = (cellVisible: boolean) => {
-    setCellVisible(cellVisible);
-  };
+  // const handleSetVisible = (cellVisible: boolean) => {
+  //   setCellVisible(cellVisible);
+  // };
 
   // useEffect(() => {
   //   console.log();
@@ -57,18 +57,7 @@ const ModelCreatorView = ({ params }: Props) => {
                 <DraggableListView list={sourceList} />
               </div>
               <div className="justify-right">
-                <EditBar
-                  blockTitle={"Block Title"}
-                  blockAction={blockAction}
-                  setBlockAction={handleBlockActionChange}
-                  cellTitle={"Cell Title"}
-                  cellValue={cellValue}
-                  setCellValue={handleCellValueChange}
-                  cellOperator={cellOperator}
-                  setCellOperator={handleOperatorChange}
-                  cellVisible={cellVisible}
-                  setCellVisible={handleSetVisible}
-                />
+                <EditBar/>
                 <Canvas modelId={modelId}/>
               </div>
             </div>
