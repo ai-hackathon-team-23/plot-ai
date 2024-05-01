@@ -47,6 +47,11 @@ const CreateModelForm = ({ userId }: Props) => {
       toast.success("Model Created!");
       router.refresh();
       toast.dismiss()
+      setOpen(false)
+      form.reset({
+        name: '', 
+        description: '', 
+      });
     },
   });
   const form = useForm<z.infer<typeof formSchema>>({
@@ -70,8 +75,12 @@ const CreateModelForm = ({ userId }: Props) => {
     console.log(values);
   }
 
+  const handleClose = () => {
+    setOpen(!open); 
+  }
+
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={handleClose}>
       <DialogTrigger asChild>
         <Button
           onClick={() => {
@@ -125,9 +134,6 @@ const CreateModelForm = ({ userId }: Props) => {
                 />
                 <Button
                   type="submit"
-                  onClick={() => {
-                    setOpen(false);
-                  }}
                 >
                   Submit
                 </Button>
