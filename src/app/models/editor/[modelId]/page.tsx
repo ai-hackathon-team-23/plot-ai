@@ -16,28 +16,28 @@ type Props = {
 const ModelCreatorView = ({ params }: Props) => {
   const { modelId } = params;
 
-  const [blockTitle, setBlockTitle] = useState("");
-  const [blockAction, setBlockAction] = useState("");
-  const [cellTitle, setCellTitle] = useState("");
-  const [cellValue, setCellValue] = useState("");
-  const [cellOperator, setCellOperator] = useState("");
-  const [cellVisible, setCellVisible] = useState(true);
+  // const [blockTitle, setBlockTitle] = useState("");
+  // const [blockAction, setBlockAction] = useState("");
+  // const [cellTitle, setCellTitle] = useState("");
+  // const [cellValue, setCellValue] = useState("");
+  // const [cellOperator, setCellOperator] = useState("");
+  // const [cellVisible, setCellVisible] = useState(true);
 
-  const handleBlockActionChange = (value: string) => {
-    setBlockAction(value);
-  };
+  // const handleBlockActionChange = (value: string) => {
+  //   setBlockAction(value);
+  // };
 
-  const handleCellValueChange = (value: string) => {
-    setCellValue(value);
-  };
+  // const handleCellValueChange = (value: string) => {
+  //   setCellValue(value);
+  // };
 
-  const handleOperatorChange = (value: string) => {
-    setCellOperator(value);
-  };
+  // const handleOperatorChange = (value: string) => {
+  //   setCellOperator(value);
+  // };
 
-  const handleSetVisible = (cellVisible: boolean) => {
-    setCellVisible(cellVisible);
-  };
+  // const handleSetVisible = (cellVisible: boolean) => {
+  //   setCellVisible(cellVisible);
+  // };
 
   // useEffect(() => {
   //   console.log();
@@ -48,28 +48,21 @@ const ModelCreatorView = ({ params }: Props) => {
   });
 
   return (
-    <Provider theme={defaultTheme} colorScheme="light">
+    <Provider theme={defaultTheme} colorScheme="light" height="95vh">
       <ReactFlowProvider>
         <ModelNodesContextProvider modelId={modelId}>
-          <div className="flex items-center justify-center align-middle">
-            <div className="grid grid-flow-col grid-rows-3">
-              <div className="justify-left row-span-3 pr-1">
+          <div className="flex items-center justify-center align-middle h-full">
+            <div className="grid grid-flow-col grid-rows-3 h-full">
+              <div className="justify-left row-span-3 pr-1 my-2 overflow-auto">
                 <DraggableListView list={sourceList} />
               </div>
-              <div className="justify-right">
-                <EditBar
-                  blockTitle={"Block Title"}
-                  blockAction={blockAction}
-                  setBlockAction={handleBlockActionChange}
-                  cellTitle={"Cell Title"}
-                  cellValue={cellValue}
-                  setCellValue={handleCellValueChange}
-                  cellOperator={cellOperator}
-                  setCellOperator={handleOperatorChange}
-                  cellVisible={cellVisible}
-                  setCellVisible={handleSetVisible}
-                />
-                <Canvas modelId={modelId}/>
+              <div className="justify-right flex flex-col row-span-3">
+                <div className="my-2">
+                  <EditBar />
+                </div>
+                <div className="mb-2 flex-1">
+                  <Canvas modelId={modelId} />
+                </div>
               </div>
             </div>
           </div>

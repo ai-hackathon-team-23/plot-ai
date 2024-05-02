@@ -13,12 +13,7 @@ import { ListView, Item, Text } from "@adobe/react-spectrum";
 import { ParameterCell } from "./parameter-cell";
 import { useEffect, useState } from "react";
 import { useModelNodesContext } from "~/app/_context/model-context";
-import {
-  PlusIcon,
-  Cross2Icon,
-  SlashIcon,
-  MinusIcon,
-} from "@radix-ui/react-icons";
+import { TrashIcon } from '@radix-ui/react-icons'
 
 interface Param {
   id: string;
@@ -31,18 +26,43 @@ interface Param {
   visible: boolean;
 }
 
+type SetTotalFunction = (total : number) => void;
+
 interface DndListViewProps extends DragAndDropOptions {
   nodes: Node<ModelListParams>[];
   blockId: string;
+  setTotal: SetTotalFunction;
 }
 
 export default function DroppableListView(props: DndListViewProps) {
-  const { blockId, ...otherProps } = props;
+  const { blockId, setTotal, ...otherProps } = props;
   const { setNodes, nodes, updatedItem, setFocus} = useModelNodesContext();
   const [initRender, setInitRender] = useState(false);
   const list = useListData({
     initialItems: [],
   });
+
+  useEffect(() => {
+    const newTotal = list.items.reduce((acc, item) => {
+      if (item.operator) {
+        switch (item.operator) {
+          case 'addition':
+            return acc + parseInt(item.input);
+          case 'subtraction':
+            return acc - parseInt(item.input);
+          case 'multiplication':
+            return acc * parseInt(item.input);
+          case 'division':
+            return acc / parseInt(item.input);
+          default:
+            return acc; 
+        }
+      } else {
+        return acc; 
+      }
+    }, 0);
+    setTotal(newTotal)
+  }, [list.items])
 
   // MOVING STATE FROM REACT-SPECTRUM LIST STATEMANAGEMNET TO REACT-FLOW GLOABAL STATE MANAGEMENT
   useEffect(() => {
@@ -187,20 +207,9 @@ export default function DroppableListView(props: DndListViewProps) {
       >
         {(item) => (
           <Item textValue={item.value}>
-            <div className="mx-1 text-gray-500">
-              {item.operator == "addition" ? (
-                <PlusIcon />
-              ) : item.operator == "subtraction" ? (
-                <MinusIcon />
-              ) : item.operator == "multiplication" ? (
-                <Cross2Icon />
-              ) : item.operator == "division" ? (
-                <SlashIcon />
-              ) : (
-                ""
-              )}
-            </div>
+            <TrashIcon className="hover:text-red-500 my-1 text-sm" onClick={() => handleDelete(item)}/>
             <div onClick={() => {setFocus(item)}}>
+            <div className="text-xs w-full h-full py-1 my-1 text-clip overflow-hidden text-gray-600 justify-stretch">
               <ParameterCell
                 id={item.id}
                 section={item.section}
@@ -211,6 +220,7 @@ export default function DroppableListView(props: DndListViewProps) {
                 operator={item.operator}
                 visible={item.visible}
               />
+              </div>
             </div>
           </Item>
         )}
