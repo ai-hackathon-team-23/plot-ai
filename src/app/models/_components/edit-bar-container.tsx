@@ -55,7 +55,7 @@ export function EditBar({}) {
 
   return (
     <>
-      <div className="grid grid-cols-10 items-center justify-center border-b border-l">
+      <div className="grid grid-cols-10 items-center justify-center border-y border-l">
         <div className="col-span-2 border-r">
           <span className="inline-block pl-4 align-middle font-bold">
             {focus ? focus.label : "Cell Title"}

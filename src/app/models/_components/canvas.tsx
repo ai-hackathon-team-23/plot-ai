@@ -87,7 +87,7 @@ export default function Canvas({ modelId }: { modelId: string }) {
   }, [setNodes, setViewport]);
 
   return (
-    <div style={{ height: 800 }} ref={ReactFlowWrapper}>
+    <div className="h-full" ref={ReactFlowWrapper}>
       <ReactFlow
         nodes={nodes}
         onNodesChange={onNodesChange}

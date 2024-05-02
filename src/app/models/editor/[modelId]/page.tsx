@@ -48,17 +48,21 @@ const ModelCreatorView = ({ params }: Props) => {
   });
 
   return (
-    <Provider theme={defaultTheme} colorScheme="light">
+    <Provider theme={defaultTheme} colorScheme="light" height="95vh">
       <ReactFlowProvider>
         <ModelNodesContextProvider modelId={modelId}>
-          <div className="flex items-center justify-center align-middle">
-            <div className="grid grid-flow-col grid-rows-3">
-              <div className="justify-left row-span-3 pr-1">
+          <div className="flex items-center justify-center align-middle h-full">
+            <div className="grid grid-flow-col grid-rows-3 h-full">
+              <div className="justify-left row-span-3 pr-1 my-2 overflow-auto">
                 <DraggableListView list={sourceList} />
               </div>
-              <div className="justify-right">
-                <EditBar/>
-                <Canvas modelId={modelId}/>
+              <div className="justify-right flex flex-col row-span-3">
+                <div className="my-2">
+                  <EditBar />
+                </div>
+                <div className="mb-2 flex-1">
+                  <Canvas modelId={modelId} />
+                </div>
               </div>
             </div>
           </div>
