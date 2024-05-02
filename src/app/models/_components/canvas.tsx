@@ -44,7 +44,7 @@ export default function Canvas({ modelId }: { modelId: string }) {
 
   useEffect(() => {
     if (savedModel.data !== undefined) {
-      console.log("RETRIEVED DATA:", JSON.parse(savedModel.data.data));
+      // console.log("RETRIEVED DATA:", JSON.parse(savedModel.data.data));
       const flowData = JSON.parse(savedModel.data.data);
       if (flowData !== null) {
         if (flowData.edges !== null) {
