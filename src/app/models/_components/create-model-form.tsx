@@ -67,7 +67,7 @@ const CreateModelForm = ({ userId }: Props) => {
       });
     }
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    // console.log(values);
   }
 
   return (

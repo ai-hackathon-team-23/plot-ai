@@ -22,8 +22,8 @@ const BlockComponent = () => {
 
   return (
     <div className="relative">
-      <div className="flex w-full max-w-sm items-center space-x-2">
-        <Input type="tytle" placeholder="Title" className="border-none"/>
+      <div className="flex w-full max-w-sm items-center space-x-2 border-none focus-visible:ring-0">
+        <Input type="title" placeholder="Name block here..." className="border-none focus-visible:ring-0"/>
       </div>
       <Handle type="target" position={Position.Left} onConnect={onConnect} />
       <div className="relative">

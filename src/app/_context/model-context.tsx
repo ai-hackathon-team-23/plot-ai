@@ -103,7 +103,7 @@ const ModelNodesContextProvider = ({
       const targetIsPane = event.target.classList.contains("react-flow__pane");
 
       if (targetIsPane) {
-        console.log("Creating new node");
+        // console.log("Creating new node");
         const id = getId();
 
         const newNode = {
