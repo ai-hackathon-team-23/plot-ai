@@ -129,7 +129,7 @@ const GptSearchPage: React.FC<GptSearchPageProps> = ({ onResults }) => {
       nodes: JSON.stringify(nodes),
       userInput: query,
     });
-    console.log(result);
+
     onResults(result);
   };
 

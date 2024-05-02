@@ -18,7 +18,6 @@ const GoogleMapsProvider = ({
   children,
   exampleData,
 }: GoogleMapsProviderProps) => {
-  console.log(exampleData ? "true" : "false");
 
   const [propertyData, setPropertyData] = useState(propertyDataGlendora);
   const [dataChange, setDataChange] = useState(false);
@@ -59,9 +58,10 @@ const GoogleMapsProvider = ({
   return (
     <APIProvider apiKey={"AIzaSyCWsv5j7wTkXTWB6kvnd3V-kMd6yEovCqU"}>
       {children}
+      <div className="flex flex-col items-center justify-center">
       {exampleData ? (
         <Map
-          style={{ width: "100vw", height: "100vh" }}
+          style={{ width: "70vw", height: "70vh" }}
           center={
             dataChange ? { lat: data[0].latitude, lng: data[0]?.longitude } : ""
           }
@@ -89,6 +89,7 @@ const GoogleMapsProvider = ({
       ) : (
         ""
       )}
+      </div>
     </APIProvider>
   );
 };
