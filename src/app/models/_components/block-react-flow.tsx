@@ -31,7 +31,7 @@ const BlockComponent = () => {
       </div>
       <Handle type="source" position={Position.Right} />
       <div className="flex w-full max-w-sm items-center space-x-2 bg-grey-200">
-        <Input type="text" disabled placeholder="" value={`$${total}`} className="flex-1 text-right pr-4 mx-4 border-none"/>
+        <Input type="text" disabled placeholder="" value={`$${total.toFixed(2)}`} className="flex-1 text-right pr-4 mx-4 border-none"/>
       </div>
     </div>
   );
