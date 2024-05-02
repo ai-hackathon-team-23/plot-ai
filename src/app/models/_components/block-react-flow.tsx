@@ -12,6 +12,7 @@ const BlockComponent = () => {
   const [total, setTotal] = useState(0);
   const { nodes } = useModelNodesContext();
   const nodeId = useNodeId();
+
   // useEffect(() => {
   //   const newTotal = targetList.items.reduce((acc, item) => acc + item.input, 0)
   //   setTotal(newTotal)
@@ -27,7 +28,7 @@ const BlockComponent = () => {
       </div>
       <Handle type="target" position={Position.Left} onConnect={onConnect} />
       <div className="relative">
-        <div className="">
+        <div className="text-clip overflow-hidden m-1">
           <DroppableListView  nodes={nodes} blockId={nodeId}/>
         </div>
             <div className="custom-drag-handle absolute top-0 bottom-0 left-0 w-3 bg-white custom-drag-handle"></div>

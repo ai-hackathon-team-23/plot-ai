@@ -101,8 +101,8 @@ export default function Canvas({ modelId }: { modelId: string }) {
         nodeTypes={nodeTypes}
       >
         <Panel position="top-right">
-          <Button onClick={handleSave}>Save</Button>
-          <Button onClick={onRestore}>Restore</Button>
+          <Button className="m-1 shadow-md hover:bg-gray-600" onClick={handleSave}>Save</Button>
+          <Button className="m-1 shadow-md hover:bg-gray-600" onClick={onRestore}>Restore</Button>
         </Panel>
         <Background />
         <Controls />

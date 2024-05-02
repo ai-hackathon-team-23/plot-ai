@@ -13,12 +13,7 @@ import { ListView, Item, Text } from "@adobe/react-spectrum";
 import { ParameterCell } from "./parameter-cell";
 import { useEffect, useState } from "react";
 import { useModelNodesContext } from "~/app/_context/model-context";
-import {
-  PlusIcon,
-  Cross2Icon,
-  SlashIcon,
-  MinusIcon,
-} from "@radix-ui/react-icons";
+import { TrashIcon } from '@radix-ui/react-icons'
 
 interface Param {
   id: string;
@@ -187,20 +182,9 @@ export default function DroppableListView(props: DndListViewProps) {
       >
         {(item) => (
           <Item textValue={item.value}>
-            <div className="mx-1 text-gray-500">
-              {item.operator == "addition" ? (
-                <PlusIcon />
-              ) : item.operator == "subtraction" ? (
-                <MinusIcon />
-              ) : item.operator == "multiplication" ? (
-                <Cross2Icon />
-              ) : item.operator == "division" ? (
-                <SlashIcon />
-              ) : (
-                ""
-              )}
-            </div>
+            <TrashIcon className="hover:text-red-500 mt-1 text-xs" onClick={() => handleDelete(item)}/>
             <div onClick={() => {setFocus(item)}}>
+            <div className="text-xs w-full h-full pt-1 text-clip overflow-hidden text-gray-600">
               <ParameterCell
                 id={item.id}
                 section={item.section}
@@ -211,6 +195,7 @@ export default function DroppableListView(props: DndListViewProps) {
                 operator={item.operator}
                 visible={item.visible}
               />
+              </div>
             </div>
           </Item>
         )}

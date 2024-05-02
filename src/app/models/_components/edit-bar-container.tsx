@@ -57,7 +57,7 @@ export function EditBar({}) {
     <>
       <div className="grid grid-cols-10 items-center justify-center border-y border-l">
         <div className="col-span-2 border-r">
-          <span className="inline-block pl-4 align-middle font-bold">
+          <span className="inline-block px-4 align-middle font-bold">
             {focus ? focus.label : "Cell Title"}
           </span>
         </div>
@@ -83,7 +83,7 @@ export function EditBar({}) {
               onValueChange={setCellOperator}
             />
           </span>
-          <span className="border-r pl-3 pr-2 pt-2">
+          <span className="border-r px-2 pt-2">
             <Checkbox
               checked={cellVisible}
               value={cellVisible}
