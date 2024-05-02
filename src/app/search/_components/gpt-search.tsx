@@ -1,15 +1,19 @@
-"use client"
+"use client";
 // @ts-nocheck
 import React, { useState } from "react";
 import { useModelNodesContext } from "~/app/_context/model-context";
 import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import { api } from "~/trpc/react";
 
 interface GptSearchPageProps {
   onResults: (results: JSON) => JSON;
 }
 
-const GptSearchPage: React.FC<GptSearchPageProps> = ({ onResults }) => {
+const GptSearchPage: React.FC<GptSearchPageProps> = ({
+  onResults,
+  onSubmitExample,
+}) => {
   const [query, setQuery] = useState<string>("");
   const [searchResult, setSearchResult] = useState<string | null>(null);
   const fetchProperties = api.propertySearch.search.useMutation();
@@ -135,32 +139,32 @@ const GptSearchPage: React.FC<GptSearchPageProps> = ({ onResults }) => {
 
   return (
     <div className="flex h-screen flex-col items-center justify-center">
-      <h1 className="mb-10 scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-        Use AI to find properties:
-      </h1>
-      <form
-        className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg"
-        onSubmit={handleSubmit}
-      >
-        <div className="mb-4">
-          <label
-            htmlFor="search"
-            className="mb-2 block text-sm font-bold text-gray-700"
-          >
-            Search:
-          </label>
-          <input
-            type="text"
-            id="search"
-            className="w-full rounded-md border border-gray-300 px-3 py-2 leading-tight focus:border-blue-500 focus:outline-none"
-            placeholder="Enter your search query..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            required
-          />
-        </div>
-        <Button type="submit">Submit</Button>
-      </form>
+      <div className="w-[40rem] rounded-lg bg-white p-6 shadow-lg">
+        <form
+          onSubmit={() => {
+            onSubmitExample();
+          }}
+        >
+          <div className="mb-4">
+            <label
+              htmlFor="search"
+              className="mb-2 block text-sm font-bold text-gray-700"
+            >
+              Search:
+            </label>
+            <Input
+              type="text"
+              id="search"
+              className="w-full"
+              placeholder="Enter your search query..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              required
+            />
+          </div>
+          <Button type="submit">Submit</Button>
+        </form>
+      </div>
       {searchResult && (
         <div className="mt-8">
           <h2 className="mb-2 text-xl font-bold">Search Result:</h2>
@@ -172,4 +176,3 @@ const GptSearchPage: React.FC<GptSearchPageProps> = ({ onResults }) => {
 };
 
 export default GptSearchPage;
-
