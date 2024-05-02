@@ -9,6 +9,7 @@ import {
   propertyDataSeattle,
 } from "../_constants/property-response";
 import Marker from "./marker";
+import GptSearchPage from "./gpt-search";
 
 interface GoogleMapsProviderProps extends React.ComponentProps<typeof Map> {
   children?: JSX.Element;
@@ -21,7 +22,13 @@ const GoogleMapsProvider = ({
 
   const [propertyData, setPropertyData] = useState(propertyDataGlendora);
   const [dataChange, setDataChange] = useState(false);
+  const [submitExample, setSubmitExample] = useState(false);
   const { data } = propertyData;
+
+  // This will trigger an example search on submission to Buffalo, NY
+  const handleSubmit = () => {
+    setSubmitExample(true)
+  }
 
   useEffect(() => {
     switch (exampleData) {
@@ -59,13 +66,13 @@ const GoogleMapsProvider = ({
     <APIProvider apiKey={"AIzaSyCWsv5j7wTkXTWB6kvnd3V-kMd6yEovCqU"}>
       {children}
       <div className="flex flex-col items-center justify-center">
-      {exampleData ? (
+      {exampleData||submitExample ? (
         <Map
           style={{ width: "70vw", height: "70vh" }}
           center={
-            dataChange ? { lat: data[0].latitude, lng: data[0]?.longitude } : ""
+            dataChange ? { lat: data[5].latitude, lng: data[5]?.longitude } : ""
           }
-          defaultCenter={{ lat: data[0].latitude, lng: data[0]?.longitude }}
+          defaultCenter={{ lat: data[5].latitude, lng: data[5]?.longitude }}
           defaultZoom={12}
           gestureHandling={"greedy"}
           disableDefaultUI={true}
@@ -87,7 +94,7 @@ const GoogleMapsProvider = ({
           })}
         </Map>
       ) : (
-        ""
+        <GptSearchPage onSubmitExample={handleSubmit}/>
       )}
       </div>
     </APIProvider>
