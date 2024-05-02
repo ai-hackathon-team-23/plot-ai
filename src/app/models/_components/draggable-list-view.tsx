@@ -84,7 +84,6 @@ function DraggableListView(props: DndListViewProps) {
                   width="size-3000"
                   dragAndDropHooks={dragAndDropHooks}
                   items={itemsInSection}
-                  density="compact"
                 >
                   {(item) => (
                     <Item textValue={item.value}>

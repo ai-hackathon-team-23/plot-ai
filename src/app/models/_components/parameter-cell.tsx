@@ -46,7 +46,7 @@ export function ParameterCell({
       </div>
       <div className="px-1">{label}</div>
       {input !== 0 && (
-        <div className="flex-1 px-1 text-end grow left-0">
+        <div className="flex-1 px-1 text-end grow right-0">
           {format === "USD"
             ? `$${input}`
             : format === "percent"

@@ -26,18 +26,43 @@ interface Param {
   visible: boolean;
 }
 
+type SetTotalFunction = (total : number) => void;
+
 interface DndListViewProps extends DragAndDropOptions {
   nodes: Node<ModelListParams>[];
   blockId: string;
+  setTotal: SetTotalFunction;
 }
 
 export default function DroppableListView(props: DndListViewProps) {
-  const { blockId, ...otherProps } = props;
+  const { blockId, setTotal, ...otherProps } = props;
   const { setNodes, nodes, updatedItem, setFocus} = useModelNodesContext();
   const [initRender, setInitRender] = useState(false);
   const list = useListData({
     initialItems: [],
   });
+
+  useEffect(() => {
+    const newTotal = list.items.reduce((acc, item) => {
+      if (item.operator) {
+        switch (item.operator) {
+          case 'addition':
+            return acc + parseInt(item.input);
+          case 'subtraction':
+            return acc - parseInt(item.input);
+          case 'multiplication':
+            return acc * parseInt(item.input);
+          case 'division':
+            return acc / parseInt(item.input);
+          default:
+            return acc; 
+        }
+      } else {
+        return acc; 
+      }
+    }, 0);
+    setTotal(newTotal)
+  }, [list.items])
 
   // MOVING STATE FROM REACT-SPECTRUM LIST STATEMANAGEMNET TO REACT-FLOW GLOABAL STATE MANAGEMENT
   useEffect(() => {
