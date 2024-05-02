@@ -182,9 +182,9 @@ export default function DroppableListView(props: DndListViewProps) {
       >
         {(item) => (
           <Item textValue={item.value}>
-            <TrashIcon className="hover:text-red-500 mt-1 text-xs" onClick={() => handleDelete(item)}/>
+            <TrashIcon className="hover:text-red-500 my-1 text-sm" onClick={() => handleDelete(item)}/>
             <div onClick={() => {setFocus(item)}}>
-            <div className="text-xs w-full h-full pt-1 text-clip overflow-hidden text-gray-600">
+            <div className="text-xs w-full h-full py-1 my-1 text-clip overflow-hidden text-gray-600 justify-stretch">
               <ParameterCell
                 id={item.id}
                 section={item.section}

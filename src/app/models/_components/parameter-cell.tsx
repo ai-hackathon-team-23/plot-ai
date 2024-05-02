@@ -31,7 +31,7 @@ export function ParameterCell({
 }: Param) {
   return (
     <div {...props} className="flex flex-row justify-stretch">
-      <div className="mx-1">
+      <div className="pl-1">
         {operator == "addition" ? (
           <PlusIcon />
         ) : operator == "subtraction" ? (
@@ -44,9 +44,9 @@ export function ParameterCell({
           ""
         )}
       </div>
-      <div className="m-1">{label}</div>
+      <div className="px-1">{label}</div>
       {input !== 0 && (
-        <div className="flex-1 mx-1 text-end grow">
+        <div className="flex-1 px-1 text-end grow left-0">
           {format === "USD"
             ? `$${input}`
             : format === "percent"
