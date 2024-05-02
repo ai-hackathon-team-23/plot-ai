@@ -12,8 +12,8 @@ export function SearchPage() {
   return (
     <GoogleMapsProvider exampleData={exampleData}>
       <div className="mx-48 mt-8 flex flex-col">
-        <h2 className="mb-8 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-          Start your journey...
+        <h2 className="mb-8 scroll-m-20 border-b pb-2 text-3xl font-extrabold tracking-tight first:mt-0">
+        Use AI to find properties:
         </h2>
         <div className="flex w-full flex-col">
           <div className="mb-4 flex w-full justify-between">
