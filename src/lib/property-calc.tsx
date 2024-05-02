@@ -78,6 +78,9 @@ export default function calculateRealEstateInvestment(
 }
 
 export const millify = (num: number) => {
+  if(!num)
+    return "No Suggested Rent"
+
   if (num >= 1000000) {
     return '$' + (num / 1000000).toFixed(1) + 'M';
   } else {

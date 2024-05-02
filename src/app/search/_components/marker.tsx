@@ -6,7 +6,7 @@ import {
   InfoWindow,
   useAdvancedMarkerRef,
 } from "@vis.gl/react-google-maps";
-import { propertyData } from "../_constants/property-response";
+import { propertyDataGlendora } from "../_constants/property-response";
 import { millify } from "~/lib/property-calc";
 
 import HousingCardHorizontal from "./housing-card";
@@ -14,7 +14,7 @@ type Props = {
   latitude: number;
   longitude: number;
   apn: string;
-  propDetail: (typeof propertyData)["data"][0];
+  propDetail: (typeof propertyDataGlendora)["data"][0];
 };
 
 const Marker = ({ latitude, longitude, apn, propDetail }: Props) => {
@@ -33,7 +33,7 @@ const Marker = ({ latitude, longitude, apn, propDetail }: Props) => {
             address={propDetail.address.address!}
             addCost={0}
             price={propDetail.assessedValue}
-            rentEst={2000}
+            rentEst={propDetail.suggestedRent? propDetail.suggestedRent: 0}
             downPayment={100000}
             interestRate={5.4}
             bathrooms={propDetail.bathrooms!}
